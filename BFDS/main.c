@@ -22,21 +22,6 @@ typedef struct Extrato{
 }Extrato, **EPointer;
 
 
-typedef struct Client{
-
-    char Nome[21];
-    char Cpf[12];
-    char Senha[7];
-
-    int ExtratoIndice;
-    //isso daqui não é pra mexer é só da função de extrato
-    double Reais;
-    double Bitcoin;
-    double Ethereum;
-    double Ripple;
-
-}Client, *CPointer;
-
 typedef struct Moeda{
 
     char Nome[11];
@@ -45,6 +30,32 @@ typedef struct Moeda{
     double TaxaCompra;
 
 }Moeda, *MPointer;
+
+typedef struct Client{
+
+    char Nome[21];
+    char Cpf[12];
+    char Senha[7];
+
+    int ExtratoIndice;
+    //isso daqui não é pra mexer é só da função de extrato
+
+    //MPointer criptos;
+
+    // poder é feito para identificar qual menu e opções o usuario terá, 0 para investidor, 1 para ADM
+    //int poder;
+
+
+    //Lembrar de na função de Excluir cripto, impossibilitar de excluir Reais, ou seja, cripto[0].
+    //vamo deletar isso aq e fazer Reais ser criptos[0]
+
+    double Reais;
+    double Bitcoin;
+    double Ethereum;
+    double Ripple;
+
+}Client, *CPointer;
+
 
 
 //funções do sistema
