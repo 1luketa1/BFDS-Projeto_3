@@ -81,6 +81,7 @@ void VenderCriptomoedas(CPointer pClients, int userIndex, MPointer PCriptos, EPo
 
 void AtualizarCotacoes(MPointer pCriptos);
 
+void MenuAdm(CPointer pClients, int userIndex);
 
 int main(int argc, char *argv[]) 
 {
@@ -942,4 +943,21 @@ void AtualizarCotacoes(MPointer pCriptos){
 
 void limparTerminal() {
     printf("\033[H\033[J");
+}
+
+
+void MenuAdm(CPointer pClients, int userIndex){
+    limparTerminal();
+    printf("Bem vindo %s!!\n\n", pClients[userIndex].Nome);
+    sleep(2);
+    printf("     _-+={Menu}=+-_     \n\n");
+    printf("  {1} - Cadastrar Investidor   \n");
+    printf(" {2} - Excluir investidor  \n");
+    printf("  {3} - Cadastrar criptomoeda   \n");
+    printf("    {4} - Excluir criptomoeda   \n");
+    printf("{5} - Consultar saldo de investidor   \n");
+    printf("{6} - Consultar extrado de investidor   \n");
+    printf(" {7} - Atualizar cotação   \n");
+    printf("       {8} - Sair   \n\n");
+    printf("Selecione sua opção:\n");
 }
