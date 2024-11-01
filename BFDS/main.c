@@ -405,12 +405,20 @@ void DebugCotacoes(MPointer pCriptos, int index){
     if(index == -1){
         int i;
         for(i = 0; i < 3; i++){
-            printf("| nome: |%10s| |,| valor: |%10.2lf| |,| TaxaVenda: |%3.2lf| |,| TaxaCompra: |%3.2lf| |;\n", pCriptos[i].Nome, pCriptos[i].Valor, pCriptos[i].TaxaVenda, pCriptos[i].TaxaCompra);
+            printf("| nome: |%10s| |,| valor: |%10.2lf| |,| TaxaVenda: |%3.2lf| |,| TaxaCompra: |%3.2lf| |;\n", 
+            pCriptos[i].Nome, 
+            pCriptos[i].Valor, 
+            pCriptos[i].TaxaVenda, 
+            pCriptos[i].TaxaCompra);
         }
 
     }
     else if(index > -1 && index < 3){
-        printf("| nome: |%10s| |,| valor: |%10.2lf| |,| TaxaVenda: |%3.2lf| |,| TaxaCompra: |%3.2lf| |;\n", pCriptos[index].Nome, pCriptos[index].Valor, pCriptos[index].TaxaVenda, pCriptos[index].TaxaCompra);
+        printf("| nome: |%10s| |,| valor: |%10.2lf| |,| TaxaVenda: |%3.2lf| |,| TaxaCompra: |%3.2lf| |;\n", 
+        pCriptos[index].Nome, 
+        pCriptos[index].Valor, 
+        pCriptos[index].TaxaVenda,
+         pCriptos[index].TaxaCompra);
     }
     else{
         perror("index fornecido para \'DebugCotacoes\' inválido");
@@ -422,11 +430,25 @@ void DebugUser(CPointer pClients, int index){
     if(index == -1){
         int i;
         for(i = 0; i < 10; i++){
-            printf("| nome: |%20s| |,| Cpf: |%11s| |,| Senha: |%6s| |,| Reais: |%15.2lf| |,| Bitcoin: |%15.2lf| |,| Ethereum: |%15.2lf| |,| Ripple: |%15.2lf| |;\n", pClients[i].Nome, pClients[i].Cpf, pClients[i].Senha, pClients[i].Reais, pClients[i].Bitcoin, pClients[i].Ethereum, pClients[i].Ripple);
+            printf("| nome: |%20s| |,| Cpf: |%11s| |,| Senha: |%6s| |,| Reais: |%15.2lf| |,| Bitcoin: |%15.2lf| |,| Ethereum: |%15.2lf| |,| Ripple: |%15.2lf| |;\n", 
+            pClients[i].Nome, 
+            pClients[i].Cpf, 
+            pClients[i].Senha, 
+            pClients[i].Reais, 
+            pClients[i].Bitcoin, 
+            pClients[i].Ethereum, 
+            pClients[i].Ripple);
         }
     }
     else if(index < 10 && index > -1){
-        printf("| nome: |%20s| |,| Cpf: |%11s| |,| Senha: |%6s| |,| Reais: |%15.2lf| |,| Bitcoin: |%15.2lf| |,| Ethereum: |%15.2lf| |,| Ripple: |%15.2lf| |;\n\n", pClients[index].Nome, pClients[index].Cpf, pClients[index].Senha, pClients[index].Reais, pClients[index].Bitcoin, pClients[index].Ethereum, pClients[index].Ripple);
+        printf("| nome: |%20s| |,| Cpf: |%11s| |,| Senha: |%6s| |,| Reais: |%15.2lf| |,| Bitcoin: |%15.2lf| |,| Ethereum: |%15.2lf| |,| Ripple: |%15.2lf| |;\n\n", 
+        pClients[index].Nome, 
+        pClients[index].Cpf, 
+        pClients[index].Senha, 
+        pClients[index].Reais, 
+        pClients[index].Bitcoin, 
+        pClients[index].Ethereum, 
+        pClients[index].Ripple);
     }
     else{
         perror("index fornecido para \'DebugUser\' inválido");
@@ -441,14 +463,42 @@ void DebugExtrato(EPointer ppExtrato, int index){
         for(i = 0; i < 10; i++){
             for (j = 0; j < 100; j++)
             {
-            printf("| Usuario: |%15s| |,| Cpf: |%11s| |,| IDNumeTransacao: |%03d| |,| TipoMoeda: |%10s| |,| TipoTransacao: |%c| |,| TaxaTransacao: |%1.2lf| |,| Quantidade: |%5.2lf| |,| ValorDaMoedaNaTroca: |%5.2lf|,| Data: |%02d/%02d/%02d|,| Hora: |%02d:%02d:%02d|;\n", ppExtrato[i][j].Usuario, ppExtrato[i][j].cpf, ppExtrato[i][j].IDNumDaTransacao, ppExtrato[i][j].TipoMoeda, ppExtrato[i][j].TipoTransacao, ppExtrato[i][j].TaxaTransacao, ppExtrato[i][j].Quantidade, ppExtrato[i][j].ValorDaMoedaNaTroca, ppExtrato[i][j].DataTransacao.tm_mday, ppExtrato[i][j].DataTransacao.tm_mon, ppExtrato[i][j].DataTransacao.tm_year, ppExtrato[i][j].DataTransacao.tm_hour, ppExtrato[i][j].DataTransacao.tm_min, ppExtrato[i][j].DataTransacao.tm_sec);
+            printf("| Usuario: |%15s| |,| Cpf: |%11s| |,| IDNumeTransacao: |%03d| |,| TipoMoeda: |%10s| |,| TipoTransacao: |%c| |,| TaxaTransacao: |%1.2lf| |,| Quantidade: |%5.2lf| |,| ValorDaMoedaNaTroca: |%5.2lf|,| Data: |%02d/%02d/%02d|,| Hora: |%02d:%02d:%02d|;\n", 
+            ppExtrato[i][j].Usuario, 
+            ppExtrato[i][j].cpf, 
+            ppExtrato[i][j].IDNumDaTransacao, 
+            ppExtrato[i][j].TipoMoeda, 
+            ppExtrato[i][j].TipoTransacao, 
+            ppExtrato[i][j].TaxaTransacao, 
+            ppExtrato[i][j].Quantidade, 
+            ppExtrato[i][j].ValorDaMoedaNaTroca, 
+            ppExtrato[i][j].DataTransacao.tm_mday, 
+            ppExtrato[i][j].DataTransacao.tm_mon, 
+            ppExtrato[i][j].DataTransacao.tm_year, 
+            ppExtrato[i][j].DataTransacao.tm_hour, 
+            ppExtrato[i][j].DataTransacao.tm_min, 
+            ppExtrato[i][j].DataTransacao.tm_sec);
             }
             printf("\n\n");
         }
     }
     else if(index > -1 && index < 10){
             for(j = 0; j < 100; j++){
-            printf("| Usuario: |%15s| |,| Cpf: |%11s| |,| IDNumeTransacao: |%03d| |,| TipoMoeda: |%10s| |,| TipoTransacao: |%c| |,| TaxaTransacao: |%1.2lf| |,| Quantidade: |%5.2lf| |,| ValorDaMoedaNaTroca: |%5.2lf|,| Data: |%02d/%02d/%02d|,| Hora: |%02d:%02d:%02d|;\n", ppExtrato[index][j].Usuario, ppExtrato[index][j].cpf, ppExtrato[index][j].IDNumDaTransacao, ppExtrato[index][j].TipoMoeda, ppExtrato[index][j].TipoTransacao, ppExtrato[index][j].TaxaTransacao, ppExtrato[index][j].Quantidade, ppExtrato[index][j].ValorDaMoedaNaTroca, ppExtrato[index][j].DataTransacao.tm_mday, ppExtrato[index][j].DataTransacao.tm_mon, ppExtrato[index][j].DataTransacao.tm_year, ppExtrato[index][j].DataTransacao.tm_hour, ppExtrato[index][j].DataTransacao.tm_min, ppExtrato[index][j].DataTransacao.tm_sec);
+            printf("| Usuario: |%15s| |,| Cpf: |%11s| |,| IDNumeTransacao: |%03d| |,| TipoMoeda: |%10s| |,| TipoTransacao: |%c| |,| TaxaTransacao: |%1.2lf| |,| Quantidade: |%5.2lf| |,| ValorDaMoedaNaTroca: |%5.2lf|,| Data: |%02d/%02d/%02d|,| Hora: |%02d:%02d:%02d|;\n", 
+            ppExtrato[index][j].Usuario, 
+            ppExtrato[index][j].cpf, 
+            ppExtrato[index][j].IDNumDaTransacao, 
+            ppExtrato[index][j].TipoMoeda, 
+            ppExtrato[index][j].TipoTransacao, 
+            ppExtrato[index][j].TaxaTransacao, 
+            ppExtrato[index][j].Quantidade, 
+            ppExtrato[index][j].ValorDaMoedaNaTroca, 
+            ppExtrato[index][j].DataTransacao.tm_mday, 
+            ppExtrato[index][j].DataTransacao.tm_mon, 
+            ppExtrato[index][j].DataTransacao.tm_year, 
+            ppExtrato[index][j].DataTransacao.tm_hour, 
+            ppExtrato[index][j].DataTransacao.tm_min, 
+            ppExtrato[index][j].DataTransacao.tm_sec);
             }
     }
     else{
