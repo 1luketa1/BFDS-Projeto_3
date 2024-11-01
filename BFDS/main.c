@@ -244,67 +244,136 @@ int main(int argc, char *argv[])
     }
     //menu
     while(true){
-        limparTerminal();
-        printf("Bem vindo %s!!\n\n", pClients[userIndex].Nome);
-        sleep(2);
-        printf("     _-+={Menu}=+-_     \n\n");
-        printf("  {1} - Consultar saldo   \n");
-        printf(" {2} - Consultar extrato  \n");
-        printf("  {3} - Depositar reais   \n");
-        printf("    {4} - Sacar reais   \n");
-        printf("{5} - Comprar criptomoedas   \n");
-        printf("{6} - Vender criptomoedas   \n");
-        printf(" {7} - Atualizar cotação   \n");
-        printf("       {8} - Sair   \n\n");
 
-        printf("Selecione sua opção:\n");
-        scanf(" %s", respostaUser);
-        sleep(1);
-        if(strlen(respostaUser) > 1){
-            printf("\n formatação incorreta, digite apenas o numero referente a função a ser utilizada\n");
-            continue;
-        }
+        //if(pClients[userIndex].poder == 0){ // se for investidor
 
-        if(respostaUser[0] == '1') ConsultarSaldo(pClients, userIndex);
-        else if(respostaUser[0] == '2') ConsultarExtrato(ppExtrato, userIndex);
-        else if(respostaUser[0] == '3') DepositarReais(pClients, userIndex, ppExtrato);
-        else if(respostaUser[0] == '4') SacarReais(pClients, userIndex, userSenha, ppExtrato);
-        else if(respostaUser[0] == '5') ComprarCriptomoedas(pClients, userIndex, &pCriptos[0], &pCriptos[1], &pCriptos[2], ppExtrato, userSenha);
-        else if(respostaUser[0] == '6') VenderCriptomoedas(pClients, userIndex, pCriptos, ppExtrato);
-        else if(respostaUser[0] == '7') AtualizarCotacoes(pCriptos);
-        else if(respostaUser[0] == '8') {
-            break;
-        }
-        else if(respostaUser[0] == 'C'){
-            srand(time(NULL));
-            double n = rand();
-            for(i = 0; i < 100; i++){
-                n = (rand() %100100) / 100.0;
+            limparTerminal();
+            printf("Bem vindo %s!!\n\n", pClients[userIndex].Nome);
+            sleep(2);
+            printf("     _-+={Menu}=+-_     \n\n");
+            printf("  {1} - Consultar saldo   \n");
+            printf(" {2} - Consultar extrato  \n");
+            printf("  {3} - Depositar reais   \n");
+            printf("    {4} - Sacar reais   \n");
+            printf("{5} - Comprar criptomoedas   \n");
+            printf("{6} - Vender criptomoedas   \n");
+            printf(" {7} - Atualizar cotação   \n");
+            printf("       {8} - Sair   \n\n");
+
+            printf("Selecione sua opção:\n");
+            scanf(" %s", respostaUser);
+            sleep(1);
+            if(strlen(respostaUser) > 1){
+                printf("\n formatação incorreta, digite apenas o numero referente a função a ser utilizada\n");
+                continue;
+            }
+
+            if(respostaUser[0] == '1') ConsultarSaldo(pClients, userIndex);
+            else if(respostaUser[0] == '2') ConsultarExtrato(ppExtrato, userIndex);
+            else if(respostaUser[0] == '3') DepositarReais(pClients, userIndex, ppExtrato);
+            else if(respostaUser[0] == '4') SacarReais(pClients, userIndex, userSenha, ppExtrato);
+            else if(respostaUser[0] == '5') ComprarCriptomoedas(pClients, userIndex, &pCriptos[0], &pCriptos[1], &pCriptos[2], ppExtrato, userSenha);
+            else if(respostaUser[0] == '6') VenderCriptomoedas(pClients, userIndex, pCriptos, ppExtrato);
+            else if(respostaUser[0] == '7') AtualizarCotacoes(pCriptos);
+            else if(respostaUser[0] == '8') {
+                break;
+            }
+            else if(respostaUser[0] == 'C'){
+                srand(time(NULL));
+                double n = rand();
+                for(i = 0; i < 100; i++){
+                    n = (rand() %100100) / 100.0;
+                    pClients[userIndex].Reais += n;
+                    AdicionarExtrato(ppExtrato,pCriptos,"Reais",pClients,userIndex,'D',n);
+                }
+            } 
+            else if(respostaUser[0] == 'c'){
+                srand(time(NULL));
+                double n = (rand() %100100) / 100.0;
                 pClients[userIndex].Reais += n;
                 AdicionarExtrato(ppExtrato,pCriptos,"Reais",pClients,userIndex,'D',n);
+            } 
+            else{
+                    printf(".");
+                    sleep(1);
+                    printf(".");
+                    sleep(1);
+                    printf(".\n");
+                    sleep(2);
+                    printf("?");
+                    sleep(1);
+                    printf("?");
+                    sleep(1);
+                    printf("?!\n");
+                    sleep(1);
+                continue;
             }
-        } 
-        else if(respostaUser[0] == 'c'){
-            srand(time(NULL));
-            double n = (rand() %100100) / 100.0;
-            pClients[userIndex].Reais += n;
-            AdicionarExtrato(ppExtrato,pCriptos,"Reais",pClients,userIndex,'D',n);
-        } 
-        else{
-                printf(".");
-                sleep(1);
-                printf(".");
-                sleep(1);
-                printf(".\n");
-                sleep(2);
-                printf("?");
-                sleep(1);
-                printf("?");
-                sleep(1);
-                printf("?!\n");
-                sleep(1);
-            continue;
-        }
+        //}
+        /*
+        //else if(pClients[userIndex].poder == 1){ // se for Administrador
+            
+            MenuAdm(pClients, userIndex);
+            scanf(" %s", respostaUser);
+            sleep(1);
+            if(strlen(respostaUser) > 1){
+                printf("\n formatação incorreta, digite apenas o numero referente a função a ser utilizada\n");
+                continue;
+            }
+
+            if(respostaUser[0] == '1')              ;
+            else if(respostaUser[0] == '2')             ;
+            else if(respostaUser[0] == '3')         ;
+            else if(respostaUser[0] == '4')             ;
+            else if(respostaUser[0] == '5')                 ;
+            else if(respostaUser[0] == '6')                 ;
+            else if(respostaUser[0] == '7')             ;
+            else if(respostaUser[0] == '8') {
+                break;
+            }
+            else if(respostaUser[0] == 'C'){
+                srand(time(NULL));
+                double n = rand();
+                for(i = 0; i < 100; i++){
+                    n = (rand() %100100) / 100.0;
+                    pClients[userIndex].Reais += n;
+                    AdicionarExtrato(ppExtrato,pCriptos,"Reais",pClients,userIndex,'D',n);
+                }
+            } 
+            else if(respostaUser[0] == 'c'){
+                srand(time(NULL));
+                double n = (rand() %100100) / 100.0;
+                pClients[userIndex].Reais += n;
+                AdicionarExtrato(ppExtrato,pCriptos,"Reais",pClients,userIndex,'D',n);
+            } 
+            else{
+                    printf(".");
+                    sleep(1);
+                    printf(".");
+                    sleep(1);
+                    printf(".\n");
+                    sleep(2);
+                    printf("?");
+                    sleep(1);
+                    printf("?");
+                    sleep(1);
+                    printf("?!\n");
+                    sleep(1);
+                continue;
+            }
+
+
+            }
+
+            else{
+                printf("Poder do usuario não reconhecido, ou index invalido");
+                getchar();
+            }
+        */
+
+
+
+
+
         SaveCotacoes(pCriptos, Cotacoes);
         SaveUsers(pClients, Users);
         SaveExtratos(ppExtrato, Extratos);
