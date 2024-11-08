@@ -5,6 +5,7 @@
 #include <stdbool.h>
 #include <unistd.h>
 #include <time.h>
+#include <ctype.h>
 
 typedef struct Extrato{
     
@@ -80,6 +81,10 @@ void ComprarCriptomoedas(CPointer pClients, int userIndex, MPointer bitcoin, MPo
 void VenderCriptomoedas(CPointer pClients, int userIndex, MPointer PCriptos, EPointer ppExtrato);
 
 void AtualizarCotacoes(MPointer pCriptos);
+
+void AdicionarUsers();
+
+void RemoverUsers();
 
 
 int main(int argc, char *argv[]) 
@@ -938,6 +943,91 @@ void AtualizarCotacoes(MPointer pCriptos){
     }
     limparTerminal();
 }
+
+
+//Esqueleto das Funções que eu irei fazer, as variáveis NÃO SÃO PERMANENTES pois ainda não mudamos o tratamento de dados
+
+void AdicionarUsers(){
+
+    //A função pede um CPF, uma senha e um nome para a criação de um novo usuário.
+    
+    limparTerminal();
+
+    // Declaração de Variáveis
+
+    char Nome[20];
+    char CPF[12];
+    char Senha[7]
+    char RespostaUser[21];
+
+    // Corpo da Função
+
+    while (true){
+        printf("Informe o CPF do usuário que você deseja cadastrar. Insira apenas os números.\n");
+        scanf("%s", CPF);
+        printf("Informe a senha do usuário que você deseja cadastrar. Apenas números são aceitos na senha.\n");
+        scanf("%s", Senha);
+        //Esse pedaço checa se o Administrador inseriu os campos necessários.
+
+        if (strlen(CPF == 0) || strlen(Senha == 0)){
+            printf("É necessário inserir um CPF e uma senha. Tente novamente.");
+        }
+        else{
+            continue;
+        }
+
+        //Esse pedaço checa se há caracteres que não são números no CPF e senha inseridos.
+        for (int i = 0; CPF[i] != '\0'; i++){
+            if (!isdigit(CPF[i])){
+                printf("O CPF inserido contém letras ou outros caracteres não aceitos. Tente novamente.\n");
+            }
+            else{
+                continue;
+            }
+        }
+
+        for (int i = 0; Senha[i] != '\0'; i++){
+            if (!isdigit(Senha[i])){
+                printf("A senha inserida contém letras ou outros caracteres não aceitos. Tente novamente.\n");
+            }
+            else{
+                continue;
+            }
+        }
+        //Esse pedaço checa se os dados inseridos não preenchem por completo o exigido ou se ultrapassam o limite.
+        if (strlen(CPF < 11) || strlen(CPF > 11)){
+            printf("CPF excede o número permitido de caracteres ou está abaixo do número mínimo de caracteres, tente novamente.\n");
+        }
+        else{
+            continue;
+        } 
+        if (strlen(Senha < 6) || strlen(Senha > 6)){
+            printf("A senha excede o número permitido de caracteres ou está abaixo do número mínimo de caracteres, tente novamente.\n");
+        }
+        else{
+            continue;
+        }
+    
+        // Hora do nome. Não conferiremos os caracteres específicos dele, apenas o tamanho da string inserida.
+
+        printf("Insira o nome do usuário. O limite de caracteres é 19.\n");
+        scanf("%s", Nome);
+
+        if (strlen(Nome == 0)){
+            printf("É necessário inserir ao menos um caractere. Tente novamente.\n");
+        }
+        else if (strlen(Nome > 19)){
+            printf("Limite de caracteres ultrapassados. Tente novamente.");
+        }
+        else{
+            continue;
+        }
+
+        // Agora é a parte que exige tratamento de dados, não tenho como dar procedimento com a função além disso.
+    }
+
+}   
+
 
 
 void limparTerminal() {
