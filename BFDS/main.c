@@ -94,6 +94,8 @@ void AtualizarCotacoes(MPointer pCriptos);
 
 void MenuAdm(CPointer pClients, int userIndex);
 
+void MenuInicial();
+
 int main(int argc, char *argv[]) 
 {
     setlocale(LC_ALL, "portuguese");
@@ -104,7 +106,9 @@ int main(int argc, char *argv[])
     FILE *pTxtCotacoes, *pTxtUsers, *pTxtExtrato;
     const char *Cotacoes = "Cotacoes.bin", *Users = "Users.bin", *Extratos = "Extrato.bin";
 
-
+    MenuInicial();
+    getchar();
+    getchar();
     char userCpf[12] = "";
     char userSenha[7] = "";
     char leitor[256];
@@ -1106,4 +1110,12 @@ void MenuInvestidor(CPointer pClients, int userIndex){
     printf(" {7} - Atualizar cotação   \n");
     printf("       {8} - Sair   \n\n");
     printf("Selecione sua opção:\n");
+}
+
+void MenuInicial(){
+    limparTerminal();
+    printf("---------------Bem Vindo!---------------\n");
+    printf("1. Cadastrar-se\n");
+    printf("2. Logar\n");
+    printf("Escolha entre logar ou cadastrar-se: ");
 }
