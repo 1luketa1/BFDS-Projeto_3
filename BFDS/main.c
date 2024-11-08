@@ -106,9 +106,6 @@ int main(int argc, char *argv[])
     FILE *pTxtCotacoes, *pTxtUsers, *pTxtExtrato;
     const char *Cotacoes = "Cotacoes.bin", *Users = "Users.bin", *Extratos = "Extrato.bin";
 
-    MenuInicial();
-    getchar();
-    getchar();
     char userCpf[12] = "";
     char userSenha[7] = "";
     char leitor[256];
