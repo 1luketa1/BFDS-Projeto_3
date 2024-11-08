@@ -967,7 +967,7 @@ void VenderCriptomoedas(CPointer pClients, int userIndex, MPointer pCriptos, EPo
                 break; 
             }
         else {
-            limparTerminal()/\z;
+            limparTerminal();
             getchar();
             break;
         }
