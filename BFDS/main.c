@@ -967,7 +967,7 @@ void VenderCriptomoedas(CPointer pClients, int userIndex, MPointer pCriptos, EPo
                 break; 
             }
         else {
-            limparTerminal();
+            limparTerminal()/\z;
             getchar();
             break;
         }
@@ -1087,6 +1087,22 @@ void MenuAdm(CPointer pClients, int userIndex){
     printf("    {4} - Excluir criptomoeda   \n");
     printf("{5} - Consultar saldo de investidor   \n");
     printf("{6} - Consultar extrado de investidor   \n");
+    printf(" {7} - Atualizar cotação   \n");
+    printf("       {8} - Sair   \n\n");
+    printf("Selecione sua opção:\n");
+}
+
+void MenuInvestidor(CPointer pClients, int userIndex){
+    limparTerminal();
+    printf("Bem vindo %s!!\n\n", pClients[userIndex].Nome);
+    sleep(2);
+    printf("     _-+={Menu}=+-_     \n\n");
+    printf("  {1} - Consultar saldo   \n");
+    printf(" {2} - Consultar extrato  \n");
+    printf("  {3} - Depositar reais   \n");
+    printf("    {4} - Sacar reais   \n");
+    printf("{5} - Comprar criptomoedas   \n");
+    printf("{6} - Vender criptomoedas   \n");
     printf(" {7} - Atualizar cotação   \n");
     printf("       {8} - Sair   \n\n");
     printf("Selecione sua opção:\n");
