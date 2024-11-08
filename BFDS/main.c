@@ -77,6 +77,9 @@ void limparTerminal();
 
 void Passar();
 
+void limparBufferEntrada();
+
+
 //Funções do Usuario
 void ConsultarSaldo(CPointer pClients, int userIndex);
 
@@ -99,6 +102,10 @@ void MenuAdm(CPointer pClients, int userIndex);
 void MenuInicial();
 
 void MenuInvestidor(CPointer pClients, int userIndex);
+
+void MenuLogin();
+
+bool Login(CPointer pClients, int clientsQuantity,int *indexClient);
 
 
 int main(int argc, char *argv[]) 
@@ -163,6 +170,7 @@ int main(int argc, char *argv[])
     //Variaveis do programa principal
 
     char respostaUserPP;
+    int *indexClient;
 
 
     while(true){
@@ -181,7 +189,8 @@ int main(int argc, char *argv[])
         //Login
         else if(respostaUserPP == '2'){
             limparTerminal();
-            printf(":)");
+                //CHAMADA TEMPORARIA DE LOGIN, NECESSARIO CRIAR O DATAQUANTITY
+            Login(pClients, 10, indexClient);
         }
         //Caso não seja 1 ou 2
         else{
@@ -885,6 +894,11 @@ void limparTerminal() {
     printf("\033[H\033[J");
 }
 
+void limparBufferEntrada() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
+
 
 void MenuAdm(CPointer pClients, int userIndex){
     limparTerminal();
@@ -934,3 +948,105 @@ void Passar(){
 
 }
 
+
+
+bool Login(CPointer pClients, int clientsQuantity,int *indexClient) {
+    //Declaração de variáveis
+    char cpfEntrada[12];
+    char passEntrada[7];
+    int indexPlayerLoop;
+    bool userAchado = false;
+    char resposta;
+    bool tudoCerto;
+
+    //Loop para login
+    while (true) {
+
+        //Exposição do menu e Solicitação de dados
+        //loop para garantir entradas corretas
+        while (true)
+        {
+            limparTerminal();
+            printf("\n-------------------Login-------------------\n");
+            printf("\nInsira seu CPF: ");
+            scanf("%11s", &cpfEntrada); 
+            limparBufferEntrada();
+            if(strlen(cpfEntrada) != 11){
+                printf("Quantidade de caracteres inválida! O CPF deve ter 11 caracteres\n");
+                Passar();
+            }
+            else{
+                printf("\nInsira sua Senha   : ");
+                scanf("%6s", &passEntrada);
+                limparBufferEntrada();
+                if (strlen(passEntrada) != 6)
+                {
+                    printf("Quantidade de caracteres inválida! A senha deve ter 6 caracteres\n");
+                    Passar();
+                }
+                else{
+                    for (int i = 0; passEntrada[i] != '\0'; i++) {
+                        if (!isdigit(passEntrada[i])) {
+                            printf("A senha é composta somente de números!\n");
+                            tudoCerto = false;
+                            Passar();
+                            break;
+                        }
+                        else{
+                            tudoCerto = true;
+                        }
+                    
+                    }
+                }
+                if(tudoCerto == true){
+                    break;
+                }
+            }
+        }
+
+        //Loop para encontrar o Usuario
+        for (indexPlayerLoop = 0; indexPlayerLoop < clientsQuantity; indexPlayerLoop++) {
+            //Verifica se o CPF e senha são os mesmos para aquele index
+            if (strcmp(pClients[indexPlayerLoop].Cpf, cpfEntrada) == 0 &&
+                strcmp(pClients[indexPlayerLoop].Senha, passEntrada) == 0) {
+                //caso a condição seja verdadeira, ele faz userAchado = false
+                userAchado = true;
+                break;
+            }
+        }
+
+        //Verifica se o usuario foi encontrado
+        if (userAchado) {
+            //Salva o index do usuario 
+            *indexClient = indexPlayerLoop;
+            printf("Bem-vindo, %s! Você está logado!\n", pClients[indexPlayerLoop].Nome);
+            Passar();
+            limparTerminal();
+            return true;
+        } 
+        //Caso não tenha sido encontrado
+        else {
+            //loop para verificar se usuario quer continuar tentando
+            while(true){
+                printf("Usuário ou senha incorretos. Deseja continuar(1 para sim, 2 para não)?\n");
+                scanf(" %1c", &resposta);
+                limparBufferEntrada();
+                //se sim ele só quebra o loop
+                if(resposta == '1'){
+                    break;
+                }
+                //se não ele retora False
+                else if(resposta == '2'){
+                    return false;
+                }
+                //Senão(verdadeiro) ele dá que a entrada foi diferente de 1 ou 2
+                else{
+                    printf("Entrada inválida, tente novamente\n");
+                    Passar();
+                }
+
+                limparTerminal();
+            }
+        }
+    }
+}
