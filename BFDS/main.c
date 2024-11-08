@@ -75,6 +75,8 @@ int PedirSenha(char userSenha[7]);
 
 void limparTerminal();
 
+void Passar();
+
 //Funções do Usuario
 void ConsultarSaldo(CPointer pClients, int userIndex);
 
@@ -95,6 +97,9 @@ void AtualizarCotacoes(MPointer pCriptos);
 void MenuAdm(CPointer pClients, int userIndex);
 
 void MenuInicial();
+
+void MenuInvestidor(CPointer pClients, int userIndex);
+
 
 int main(int argc, char *argv[]) 
 {
@@ -152,246 +157,50 @@ int main(int argc, char *argv[])
     }
     fclose(pTxtExtrato);
 
-    //login
-    bool usuarioEncontrado, cpfIgual;
-    while (true){
-        printf("digite seu cpf:\n");
-        scanf(" %s", respostaUser);
-        if(strlen(respostaUser) > 11){
-            printf("CPF digitado inválido, quantidade de caracteres excedida:\n");
-            while (true)
-            {
-                printf("deseja continuar?\'s/n\'\n");
-                scanf(" %s", respostaUser);
-                if(respostaUser[0] == 'n') break;
-                else if (respostaUser[0] == 's') break;
-                printf("resposta não reconhecida\n");
-            }
-            if(respostaUser[0] == 'n'){
-                free(pClients);
-                return 0;
-            }
-            continue;
-        }
-        else if(strlen(respostaUser) < 11){
-            printf("CPF digitado inválido, quantidade mínima de caracteres não preenchida:\n");
-            while (true)
-            {
-                printf("deseja continuar?\'s/n\'\n");
-                scanf(" %s", respostaUser);
-                if(respostaUser[0] == 'n') break;
-                else if (respostaUser[0] == 's') break;
-                printf("resposta não reconhecida\n");
-            }
-            if(respostaUser[0] == 'n'){
-                free(pClients);
-                return 0;
-            }
-            continue;
-        }
-        usuarioEncontrado = false;
-        for (index = 0; index < 10; index++)
-        {
-            cpfIgual = true;
-            for (i = 0; i < 11; i++)
-            {
-                if (pClients[index].Cpf[i] != respostaUser[i]) cpfIgual = false;
-            }
-            if(cpfIgual){
-                userIndex = index;
-                strcpy(userCpf, pClients[userIndex].Cpf);
-                strcpy(userSenha, pClients[userIndex].Senha);
-                usuarioEncontrado = true;
-            }
-        }
-        if (usuarioEncontrado)
-        {
-            break;
-        }
-        else{
-            printf("Usuário não encontrado.\n");
-            while (true){
-                printf("deseja continuar?\'s/n\'\n");
-                scanf(" %s", respostaUser);
-                if(respostaUser[0] == 'n') break;
-                else if (respostaUser[0] == 's') break;
-                printf("resposta não reconhecida\n");
-            }
-            if(respostaUser[0] == 'n'){
-                free(pClients);
-                return 0;
-            }
-        }
-    }
-    if(userIndex == -1 || userCpf == ""){
-        free(pClients);
-        return 0;
-    }
-    pedirSenha = PedirSenha(userSenha);
-    if(pedirSenha == -1){
-        free(pClients);  
-        return 0;
-    } 
-    else if(!pedirSenha){
-        while (!pedirSenha)
-        {
-            printf("a senha informada está incorreta");
-            while (true){
-                printf("deseja continuar?\'s/n\'\n");
-                scanf(" %s", respostaUser);
-                if(respostaUser[0] == 'n') break;
-                else if (respostaUser[0] == 's') break;
-                printf("resposta não reconhecida\n");
-            }
-            if(respostaUser[0] == 'n'){
-                free(pClients);
-                return 0;
-            }
-            pedirSenha = PedirSenha(userSenha);
-            if(pedirSenha == -1){
-                free(pClients);
-                return 0;
-            }
-        }
-    }
-    //menu
+
+    //   P R O G R A M A       P R I N C I P A L 
+
+    //Variaveis do programa principal
+
+    char respostaUserPP;
+
+
     while(true){
 
-        //if(pClients[userIndex].poder == 0){ // se for investidor
+        limparTerminal();
+        //Menu principal
+        MenuInicial();
+        //Pergunta se o usuario que se cadastrar ou logar
+        scanf(" %c", &respostaUserPP);
 
+        //Cadastro
+        if(respostaUserPP == '1'){
             limparTerminal();
-            printf("Bem vindo %s!!\n\n", pClients[userIndex].Nome);
-            sleep(2);
-            printf("     _-+={Menu}=+-_     \n\n");
-            printf("  {1} - Consultar saldo   \n");
-            printf(" {2} - Consultar extrato  \n");
-            printf("  {3} - Depositar reais   \n");
-            printf("    {4} - Sacar reais   \n");
-            printf("{5} - Comprar criptomoedas   \n");
-            printf("{6} - Vender criptomoedas   \n");
-            printf(" {7} - Atualizar cotação   \n");
-            printf("       {8} - Sair   \n\n");
+            printf(":)");
+        }
+        //Login
+        else if(respostaUserPP == '2'){
+            limparTerminal();
+            printf(":)");
+        }
+        //Caso não seja 1 ou 2
+        else{
+            limparTerminal();
+            printf("Input inválido, tente novamente...");
+            Passar();
+        }
 
-            printf("Selecione sua opção:\n");
-            scanf(" %s", respostaUser);
-            sleep(1);
-            if(strlen(respostaUser) > 1){
-                printf("\n formatação incorreta, digite apenas o numero referente a função a ser utilizada\n");
-                continue;
-            }
-
-            if(respostaUser[0] == '1') ConsultarSaldo(pClients, userIndex);
-            else if(respostaUser[0] == '2') ConsultarExtrato(ppExtrato, userIndex);
-            else if(respostaUser[0] == '3') DepositarReais(pClients, userIndex, ppExtrato);
-            else if(respostaUser[0] == '4') SacarReais(pClients, userIndex, userSenha, ppExtrato);
-            else if(respostaUser[0] == '5') ComprarCriptomoedas(pClients, userIndex, &pCriptos[0], &pCriptos[1], &pCriptos[2], ppExtrato, userSenha);
-            else if(respostaUser[0] == '6') VenderCriptomoedas(pClients, userIndex, pCriptos, ppExtrato);
-            else if(respostaUser[0] == '7') AtualizarCotacoes(pCriptos);
-            else if(respostaUser[0] == '8') {
-                break;
-            }
-            else if(respostaUser[0] == 'C'){
-                srand(time(NULL));
-                double n = rand();
-                for(i = 0; i < 100; i++){
-                    n = (rand() %100100) / 100.0;
-                    pClients[userIndex].Reais += n;
-                    AdicionarExtrato(ppExtrato,pCriptos,"Reais",pClients,userIndex,'D',n);
-                }
-            } 
-            else if(respostaUser[0] == 'c'){
-                srand(time(NULL));
-                double n = (rand() %100100) / 100.0;
-                pClients[userIndex].Reais += n;
-                AdicionarExtrato(ppExtrato,pCriptos,"Reais",pClients,userIndex,'D',n);
-            } 
-            else{
-                    printf(".");
-                    sleep(1);
-                    printf(".");
-                    sleep(1);
-                    printf(".\n");
-                    sleep(2);
-                    printf("?");
-                    sleep(1);
-                    printf("?");
-                    sleep(1);
-                    printf("?!\n");
-                    sleep(1);
-                continue;
-            }
-        //}
-        /*
-        //else if(pClients[userIndex].poder == 1){ // se for Administrador
-            
-            MenuAdm(pClients, userIndex);
-            scanf(" %s", respostaUser);
-            sleep(1);
-            if(strlen(respostaUser) > 1){
-                printf("\n formatação incorreta, digite apenas o numero referente a função a ser utilizada\n");
-                continue;
-            }
-
-            if(respostaUser[0] == '1')              ;
-            else if(respostaUser[0] == '2')             ;
-            else if(respostaUser[0] == '3')         ;
-            else if(respostaUser[0] == '4')             ;
-            else if(respostaUser[0] == '5')                 ;
-            else if(respostaUser[0] == '6')                 ;
-            else if(respostaUser[0] == '7')             ;
-            else if(respostaUser[0] == '8') {
-                break;
-            }
-            else if(respostaUser[0] == 'C'){
-                srand(time(NULL));
-                double n = rand();
-                for(i = 0; i < 100; i++){
-                    n = (rand() %100100) / 100.0;
-                    pClients[userIndex].Reais += n;
-                    AdicionarExtrato(ppExtrato,pCriptos,"Reais",pClients,userIndex,'D',n);
-                }
-            } 
-            else if(respostaUser[0] == 'c'){
-                srand(time(NULL));
-                double n = (rand() %100100) / 100.0;
-                pClients[userIndex].Reais += n;
-                AdicionarExtrato(ppExtrato,pCriptos,"Reais",pClients,userIndex,'D',n);
-            } 
-            else{
-                    printf(".");
-                    sleep(1);
-                    printf(".");
-                    sleep(1);
-                    printf(".\n");
-                    sleep(2);
-                    printf("?");
-                    sleep(1);
-                    printf("?");
-                    sleep(1);
-                    printf("?!\n");
-                    sleep(1);
-                continue;
-            }
-
-
-            }
-
-            else{
-                printf("Poder do usuario não reconhecido, ou index invalido");
-                getchar();
-            }
-        */
-
-
-
-
-
-        SaveCotacoes(pCriptos, Cotacoes);
-        SaveUsers(pClients, Users);
-        SaveExtratos(ppExtrato, Extratos);
-        printf("Pressione Enter para continuar...");
-        getchar();
     }
+
+
+
+
+    SaveCotacoes(pCriptos, Cotacoes);
+    SaveUsers(pClients, Users);
+    SaveExtratos(ppExtrato, Extratos);
+    printf("Pressione Enter para continuar...");
+    getchar();
+
     free(pClients);
     free(pCriptos);
     for(i = 0; i < 10; i++){
@@ -1116,3 +925,12 @@ void MenuInicial(){
     printf("2. Logar\n");
     printf("Escolha entre logar ou cadastrar-se: ");
 }
+
+void Passar(){
+
+    printf("\nPRESSIONE ENTER PARA VOLTAR!");
+    getchar();
+    getchar();
+
+}
+
