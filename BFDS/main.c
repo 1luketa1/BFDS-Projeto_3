@@ -66,6 +66,11 @@ typedef struct Client{
 /*Prototipos*/
 //------------------------------------------------------------------------//
 
+void debugCoin(CoPointer pCoins, DataQuantity dataQuantity, int index);
+
+void debugClient(ClPointer ClPointer, DataQuantity dataQuantity, int index);
+
+
 //------------------------------------------------------------------------//
 
 
@@ -169,6 +174,101 @@ int main(){
 
 /*Print/DebugFunctions*/
 //------------------------------------------------------------------------//
+
+void debugCoin(CoPointer pCoins, DataQuantity dataQuantity, int index){
+
+    if(index == -1){ //Todos as Coins
+        for(index = 0; index < dataQuantity.Coins; index++){
+        
+        printf("===============================\n");
+        printf("Nome: %s\n", pCoins[index].Name);
+        printf("Valor: %s\n", pCoins[index].Value);
+        printf("Taxa de Venda: %lf\n", pCoins[index].SellTax);
+        printf("Taxa de Compra: %lf\n", pCoins[index].BuyTax);
+        printf("===============================\n");
+        }
+    }
+    else if(index > -1 && index < dataQuantity.Coins){ // Coin de Index Específico
+        
+        printf("===============================\n");
+        printf("Nome: %s\n", pCoins[index].Name);
+        printf("Valor: %s\n", pCoins[index].Value);
+        printf("Taxa de Venda: %lf\n", pCoins[index].SellTax);
+        printf("Taxa de Compra: %lf\n", pCoins[index].BuyTax);
+        printf("===============================\n");
+    }
+    else{
+        printf("Index inválido na função \"debugCoin\".\n");
+    }
+}
+
+void debugClient(ClPointer pClients, DataQuantity dataQuantity, int index){
+    
+    if(index == -1){ // Todos os Users
+        //Todos
+        for(index = 0; index < dataQuantity.Clients; index++){
+            printf("===============================\n");
+            printf("IsAdm: %s", pClients[index].IsAdm ? "True" : "False");
+            printf("Nome: %s\n", pClients[index].Name);
+            printf("CPF: %s\n", pClients[index].Cpf);
+            printf("Senha: %s\n", pClients[index].Pass);
+            for(int j = 0; j < dataQuantity.Coins ; j++){
+                printf("%s : %lf \n", pClients[index].Currencies[j].Name, pClients[index].Currencies[j].quantity);
+            printf("===============================\n");
+
+            printf("Extratos:\n");
+
+            for(int IndexExtract = 0; IndexExtract <100; IndexExtract++){
+                printf("||Nome: %s || CPF: %s || Tipo de Transação: %s || Nome da Moeda: %s || Quantidade Movida: %lf || Moeda: %s "
+                "|| Moeda: %s || Valor da Moeda: %lf || Taxa de Venda: %lf || Taxa de Compra: %lf || ID do Extrato: %d || "
+                "Horário: %d:%d:%d\n", 
+                pClients[index].Extract[IndexExtract].Name, pClients[index].Extract[IndexExtract].Cpf, 
+                pClients[index].Extract[IndexExtract].TransactionType, pClients[index].Extract[IndexExtract].Currency.Name,
+                pClients[index].Extract[IndexExtract].Currency.quantity, pClients[index].Extract[IndexExtract].Coin.Name,
+                pClients[index].Extract[IndexExtract].Coin.Value, pClients[index].Extract[IndexExtract].Coin.SellTax,
+                pClients[index].Extract[IndexExtract].Coin.BuyTax, pClients[index].Extract[IndexExtract].IDNumber, 
+                pClients[index].Extract[IndexExtract].Date);
+            }
+            // Remover Nome e CPF, Quantitiy será alterada
+            printf("===============================\n");
+            }
+        }
+    }
+    else if(index > -1 && index < dataQuantity.Clients){ // Users de Index Específico
+
+        for(index = 0; index < dataQuantity.Clients; index++){
+            printf("_______________________________\n");
+            printf("IsAdm: %s", pClients[index].IsAdm ? "True" : "False");
+            printf("Nome: %s\n", pClients[index].Name);
+            printf("CPF: %s\n", pClients[index].Cpf);
+            printf("Senha: %s\n", pClients[index].Pass);
+            for(int j = 0; j < dataQuantity.Coins ; j++){
+                printf("%s : %lf \n", pClients[index].Currencies[j].Name, pClients[index].Currencies[j].quantity);
+            
+            printf("===============================\n");
+
+            printf("Extratos:\n");
+
+            for(int IndexExtract = 0; IndexExtract < 100; IndexExtract++){
+                printf("||Nome: %s || CPF: %s || Tipo de Transação: %s || Nome da Moeda: %s || Quantidade Movida: %lf || Moeda: %s "
+                "|| Moeda: %s || Valor da Moeda: %lf || Taxa de Venda: %lf || Taxa de Compra: %lf || ID do Extrato: %d || "
+                "Horário: %d:%d:%d\n", 
+                pClients[index].Extract[IndexExtract].Name, pClients[index].Extract[IndexExtract].Cpf, 
+                pClients[index].Extract[IndexExtract].TransactionType, pClients[index].Extract[IndexExtract].Currency.Name,
+                pClients[index].Extract[IndexExtract].Currency.quantity, pClients[index].Extract[IndexExtract].Coin.Name,
+                pClients[index].Extract[IndexExtract].Coin.Value, pClients[index].Extract[IndexExtract].Coin.SellTax,
+                pClients[index].Extract[IndexExtract].Coin.BuyTax, pClients[index].Extract[IndexExtract].IDNumber, 
+                pClients[index].Extract[IndexExtract].Date);
+            }
+            // Remover Nome e CPF, Quantitiy será alterada
+            printf("===============================\n");
+            }
+        }
+    }
+    else{
+        printf("Index inválido na função \"debugClient\".\n");
+    }
+}
 
 //------------------------------------------------------------------------//
 
