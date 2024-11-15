@@ -36,7 +36,7 @@ typedef struct Extract{
     char TransactionType;
     //'D'(pra deposito), 'S'(pra venda) ou 'B' (Pra compra)
     Coin Coin;
-    int Quantity;
+    double Quantity;
     int IDNumber;
     struct tm Date;
 
@@ -63,8 +63,9 @@ typedef struct Client{
 
 /*Prototipos*/
 //------------------------------------------------------------------------//
-
-
+void printExtrato(ClPointer pClients, DataQuantity dataQuantities, int index);
+void debugCoin(CoPointer pCoins, DataQuantity dataQuantity, int index);
+void debugClient(ClPointer ClPointer, DataQuantity dataQuantity, int index);
 void SaveDataQuantity(DataQuantity dataQuantity, const char *dataQuantities);
 void SaveCoin(CoPointer pCoins, int coinsQuantity, const char *coins);
 void SaveClient(ClPointer pClients, int clientsQuantity, const char *clients);
@@ -177,7 +178,72 @@ int main(){
 
 /*Print/DebugFunctions*/
 //------------------------------------------------------------------------//
+void printExtrato(ClPointer pClients, DataQuantity dataQuantities, int index){
 
+    if(index >= dataQuantities.Clients || index < 0){
+        printf("Índice inválido!\n");
+        return;
+    }
+    else{
+            printf("Nome: %s\n", pClients[index].Name);
+            printf("CPF: %s\n", pClients[index].Cpf);
+
+            printf("===============================\n");
+            printf("Extratos:\n");
+
+            for(int IndexExtract = 0; IndexExtract < 100; IndexExtract++){
+                printf("||Tipo de Transação: %s || Valor: %lf || Tipo de Transação: %s || Nome da Moeda: %s || Valor da Moeda: %lf || Taxa de Venda: %s "
+                "|| Taxa de Compra: %lf || ID do Extrato: %d || Quantidade Movida: %lf ||"
+                "Horário: %d:%d:%d ||\n", 
+                pClients[index].Extract[IndexExtract].TransactionType, pClients[index].Extract[IndexExtract].Coin.Name, 
+                pClients[index].Extract[IndexExtract].Coin.Value, pClients[index].Extract[IndexExtract].Coin.SellTax,
+                pClients[index].Extract[IndexExtract].Coin.BuyTax,pClients[index].Extract[IndexExtract].IDNumber,
+                pClients[index].Extract[IndexExtract].Quantity, pClients[index].Extract[IndexExtract].Date.tm_hour,
+                pClients[index].Extract[IndexExtract].Date.tm_min, pClients[index].Extract[IndexExtract].Date.tm_sec);
+            }
+            printf("===============================\n");  
+    }
+}
+
+void debugClient(ClPointer pClients, DataQuantity dataQuantities, int index){
+    
+    if(index == -1){ // Todos os Users
+        //Todos
+        for(index = 0; index < dataQuantities.Clients; index++){
+            printf("===============================\n");
+            printf("IsAdm: %s", pClients[index].IsAdm ? "True" : "False");
+            printf("Nome: %s\n", pClients[index].Name);
+            printf("CPF: %s\n", pClients[index].Cpf);
+            printf("Senha: %s\n", pClients[index].Pass);
+            for(int j = 0; j < dataQuantities.Coins ; j++){
+                printf("%s : %lf \n", pClients[index].Currencies[j].Name, pClients[index].Currencies[j].quantity);
+            }
+            printf("===============================\n");
+
+            printExtrato(pClients, dataQuantities, index);
+
+            printf("===============================\n");
+        }
+    }
+    else if(index > -1 && index < dataQuantities.Clients){ // Users de Index Específico
+        printf("===============================\n");
+        printf("IsAdm: %s", pClients[index].IsAdm ? "True" : "False");
+        printf("Nome: %s\n", pClients[index].Name);
+        printf("CPF: %s\n", pClients[index].Cpf);
+        printf("Senha: %s\n", pClients[index].Pass);
+        for(int j = 0; j < dataQuantities.Coins ; j++){
+            printf("%s : %lf \n", pClients[index].Currencies[j].Name, pClients[index].Currencies[j].quantity);
+        }   
+        printf("===============================\n");
+
+        printExtrato(pClients, dataQuantities, index);
+
+        printf("===============================\n");
+    }
+    else{
+        printf("Index inválido na função \"debugClient\".\n");
+    }
+}
 //------------------------------------------------------------------------//
 
 
