@@ -70,11 +70,11 @@ void SaveDataQuantity(DataQuantity dataQuantity, const char *dataQuantities);
 void SaveCoin(CoPointer pCoins, int coinsQuantity, const char *coins);
 void SaveClient(ClPointer pClients, int clientsQuantity, const char *clients);
 void FreePClients(ClPointer pClients, DataQuantity dataQuantity);
-void AddCoin(ClPointer pClients, CoPointer pCoins, DataQuantity *dataQuantity, char *name, double value, double sellTax, double buyTax);
-void AddClient(CoPointer pCoins, ClPointer pClients, DataQuantity *dataQuantity, bool isAdm, char *name, char *cpf, char *pass);
-bool RemoveCoin(ClPointer pClients, CoPointer pCoins, int indexToRemove, DataQuantity *dataQuantity);
-bool RemoveClient(ClPointer pClients, int indexToRemove, DataQuantity *dataQuantity);
-void AddExtract(ClPointer pClients, int clientIndex, char transactionType, Coin coin, int quantity);
+void AddCoin(ClPointer *pClients, CoPointer *pCoins, DataQuantity *dataQuantity, char *name, double value, double sellTax, double buyTax);
+void AddClient(CoPointer pCoins, ClPointer *pClients, DataQuantity *dataQuantity, bool isAdm, char *name, char *cpf, char *pass);
+bool RemoveCoin(ClPointer pClients, CoPointer *pCoins, int indexToRemove, DataQuantity *dataQuantity);
+bool RemoveClient(ClPointer *pClients, int indexToRemove, DataQuantity *dataQuantity);
+void AddExtract(ClPointer *pClients, int clientIndex, char transactionType, Coin coin, int quantity);
 //------------------------------------------------------------------------//
 
 
@@ -298,39 +298,39 @@ void FreePClients(ClPointer pClients, DataQuantity dataQuantity){
     pClients == NULL;
 }
 
-void AddCoin(ClPointer pClients, CoPointer pCoins, DataQuantity *dataQuantity, char *name, double value, double sellTax, double buyTax){
+void AddCoin(ClPointer *pClients, CoPointer *pCoins, DataQuantity *dataQuantity, char *name, double value, double sellTax, double buyTax){
     dataQuantity[0].Coins++;
-    pCoins = (CoPointer)realloc(pCoins, sizeof(Coin) * dataQuantity[0].Coins);
+    (*pCoins) = (CoPointer)realloc((*pCoins), sizeof(Coin) * dataQuantity[0].Coins);
     //memset(&pCoins[dataQuantity[0].Coins-1], 0, sizeof(Coin)); suponho que não precisa por ser uma estrutura simples
-    strcpy(pCoins[dataQuantity[0].Coins-1].Name, name);
-    pCoins[dataQuantity[0].Coins-1].Value = value;
-    pCoins[dataQuantity[0].Coins-1].SellTax = sellTax;
-    pCoins[dataQuantity[0].Coins-1].BuyTax = buyTax;
+    strcpy((*pCoins)[dataQuantity[0].Coins-1].Name, name);
+    (*pCoins)[dataQuantity[0].Coins-1].Value = value;
+    (*pCoins)[dataQuantity[0].Coins-1].SellTax = sellTax;
+    (*pCoins)[dataQuantity[0].Coins-1].BuyTax = buyTax;
     for(int i = 0; i < dataQuantity[0].Clients; i++){
-        pClients[i].Currencies = (CuPointer)realloc(pClients[i].Currencies, dataQuantity[0].Coins * sizeof(Currency));
-        strcpy(pClients[i].Currencies[dataQuantity[0].Coins-1].Name, name);
-        pClients[i].Currencies[dataQuantity[0].Coins-1].quantity = 0;
+        (*pClients)[i].Currencies = (CuPointer)realloc((*pClients)[i].Currencies, dataQuantity[0].Coins * sizeof(Currency));
+        strcpy((*pClients)[i].Currencies[dataQuantity[0].Coins-1].Name, name);
+        (*pClients)[i].Currencies[dataQuantity[0].Coins-1].quantity = 0;
     }
 }
 
-void AddClient(CoPointer pCoins, ClPointer pClients, DataQuantity *dataQuantity, bool isAdm, char *name, char *cpf, char *pass){
-    if(pClients == NULL){
-        pClients = (ClPointer)Calloc(1, sizeof(Client));
+void AddClient(CoPointer pCoins, ClPointer *pClients, DataQuantity *dataQuantity, bool isAdm, char *name, char *cpf, char *pass){
+    if((*pClients) == NULL){
+        (*pClients) = (ClPointer)Calloc(1, sizeof(Client));
     }
     dataQuantity[0].Clients++;
-    pClients = (ClPointer)realloc(pClients, sizeof(pClients[0]) * dataQuantity[0].Clients);
-    memset(&pClients[dataQuantity[0].Clients-1], 0, sizeof(pClients[0]));
-    pClients[dataQuantity[0].Clients-1].IsAdm = isAdm;
-    strcpy(pClients[dataQuantity[0].Clients-1].Name, name);
-    strcpy(pClients[dataQuantity[0].Clients-1].Cpf, cpf);
-    strcpy(pClients[dataQuantity[0].Clients-1].Pass, pass);
-    pClients[dataQuantity[0].Clients-1].Currencies = (CuPointer)calloc(dataQuantity[0].Coins ,sizeof(Currency));
+    (*pClients) = (ClPointer)realloc((*pClients), sizeof((*pClients)[0]) * dataQuantity[0].Clients);
+    memset(&(*pClients)[dataQuantity[0].Clients-1], 0, sizeof((*pClients)[0]));
+    (*pClients)[dataQuantity[0].Clients-1].IsAdm = isAdm;
+    strcpy((*pClients)[dataQuantity[0].Clients-1].Name, name);
+    strcpy((*pClients)[dataQuantity[0].Clients-1].Cpf, cpf);
+    strcpy((*pClients)[dataQuantity[0].Clients-1].Pass, pass);
+    (*pClients)[dataQuantity[0].Clients-1].Currencies = (CuPointer)calloc(dataQuantity[0].Coins ,sizeof(Currency));
     for (int i = 0; i < dataQuantity[0].Coins; i++){
-        strcpy(pClients[dataQuantity[0].Clients-1].Currencies[i].Name, pCoins[i].Name);
+        strcpy((*pClients)[dataQuantity[0].Clients-1].Currencies[i].Name, pCoins[i].Name);
     }
 }
 
-bool RemoveCoin(ClPointer pClients, CoPointer pCoins, int indexToRemove, DataQuantity *dataQuantity){
+bool RemoveCoin(ClPointer pClients, CoPointer *pCoins, int indexToRemove, DataQuantity *dataQuantity){
     CoPointer tempPCoins;
     tempPCoins = (CoPointer)calloc(dataQuantity[0].Coins-1, sizeof(Coin));
     if(tempPCoins == NULL){
@@ -340,7 +340,7 @@ bool RemoveCoin(ClPointer pClients, CoPointer pCoins, int indexToRemove, DataQua
     int j = 0;
     for (int i = 0; i < dataQuantity[0].Coins; i++){
         if(indexToRemove != i){
-            tempPCoins[j] = pCoins[i];
+            tempPCoins[j] = (*pCoins)[i];
             j++;
         }
     }
@@ -364,18 +364,18 @@ bool RemoveCoin(ClPointer pClients, CoPointer pCoins, int indexToRemove, DataQua
             tempCurrencies[I] = pClients[i].Currencies[I];
         }
     }
-    pCoins = (CoPointer)realloc(pCoins, sizeof(Coin) * dataQuantity[0].Coins);
+    (*pCoins) = (CoPointer)realloc((*pCoins), sizeof(Coin) * dataQuantity[0].Coins);
     for(int i = 0; i < dataQuantity[0].Coins; i++){
-        pCoins[i] = tempPCoins[i]; 
+        (*pCoins)[i] = tempPCoins[i]; 
     }
     free(tempPCoins);
     free(tempCurrencies);
     return true;
 }
 
-bool RemoveClient(ClPointer pClients, int indexToRemove, DataQuantity *dataQuantity){
+bool RemoveClient(ClPointer *pClients, int indexToRemove, DataQuantity *dataQuantity){
     ClPointer tempPClients;
-    tempPClients = (ClPointer)calloc(sizeof(pClients[0]), dataQuantity[0].Clients-1);
+    tempPClients = (ClPointer)calloc(sizeof((*pClients)[0]), dataQuantity[0].Clients-1);
     if(tempPClients == NULL){
         perror("erro ao alocar memoria para \"tempPClients\" em \"RemoveClient\"");
         return false;
@@ -383,43 +383,43 @@ bool RemoveClient(ClPointer pClients, int indexToRemove, DataQuantity *dataQuant
     int j = 0;
     for (int i = 0; i < dataQuantity[0].Clients; i++){
         if(indexToRemove != i){
-            tempPClients[j] = pClients[i];
+            tempPClients[j] = (*pClients)[i];
             j++;
         }
         else{
-            free(pClients[i].Currencies);
+            free((*pClients)[i].Currencies);
         }
     }
     dataQuantity[0].Clients--;
-    pClients = (ClPointer)realloc(pClients, sizeof(pClients[0]) * dataQuantity[0].Clients);
+    (*pClients) = (ClPointer)realloc((*pClients), sizeof((*pClients)[0]) * dataQuantity[0].Clients);
     for(int i = 0; i < dataQuantity[0].Clients; i++){
-        pClients[i] = tempPClients[i];
+        (*pClients)[i] = tempPClients[i];
     }
     free(tempPClients);
     return true;
 }
 
-void AddExtract(ClPointer pClients, int clientIndex, char transactionType, Coin coin, int quantity){
+void AddExtract(ClPointer (*pClients), int clientIndex, char transactionType, Coin coin, int quantity){
 
     time_t t;
     time(&t);
-    pClients[clientIndex].Extract[pClients[clientIndex].CurrentExtractIndex].TransactionType = transactionType;
-    pClients[clientIndex].Extract[pClients[clientIndex].CurrentExtractIndex].Coin = coin;
-    pClients[clientIndex].Extract[pClients[clientIndex].CurrentExtractIndex].Quantity = quantity;
+    (*pClients)[clientIndex].Extract[(*pClients)[clientIndex].CurrentExtractIndex].TransactionType = transactionType;
+    (*pClients)[clientIndex].Extract[(*pClients)[clientIndex].CurrentExtractIndex].Coin = coin;
+    (*pClients)[clientIndex].Extract[(*pClients)[clientIndex].CurrentExtractIndex].Quantity = quantity;
     int num;
-    if(pClients[clientIndex].CurrentExtractIndex-1 == -1){
-        num = pClients[clientIndex].Extract[99].IDNumber;
+    if((*pClients)[clientIndex].CurrentExtractIndex-1 == -1){
+        num = (*pClients)[clientIndex].Extract[99].IDNumber;
     }
     else{
-        num = pClients[clientIndex].Extract[pClients[clientIndex].CurrentExtractIndex-1].IDNumber;
+        num = (*pClients)[clientIndex].Extract[(*pClients)[clientIndex].CurrentExtractIndex-1].IDNumber;
     }
-    pClients[clientIndex].Extract[pClients[clientIndex].CurrentExtractIndex].IDNumber = num;
-    pClients[clientIndex].Extract[pClients[clientIndex].CurrentExtractIndex].Date = *localtime(&t);
-    pClients[clientIndex].Extract[pClients[clientIndex].CurrentExtractIndex].Date.tm_mon += 1;
-    pClients[clientIndex].Extract[pClients[clientIndex].CurrentExtractIndex].Date.tm_year += 1900;
-    pClients[clientIndex].CurrentExtractIndex++;
-    if(pClients[clientIndex].CurrentExtractIndex == 100){
-        pClients[clientIndex].CurrentExtractIndex = 0;
+    (*pClients)[clientIndex].Extract[(*pClients)[clientIndex].CurrentExtractIndex].IDNumber = num;
+    (*pClients)[clientIndex].Extract[(*pClients)[clientIndex].CurrentExtractIndex].Date = *localtime(&t);
+    (*pClients)[clientIndex].Extract[(*pClients)[clientIndex].CurrentExtractIndex].Date.tm_mon += 1;
+    (*pClients)[clientIndex].Extract[(*pClients)[clientIndex].CurrentExtractIndex].Date.tm_year += 1900;
+    (*pClients)[clientIndex].CurrentExtractIndex++;
+    if((*pClients)[clientIndex].CurrentExtractIndex == 100){
+        (*pClients)[clientIndex].CurrentExtractIndex = 0;
     }
 
 }
