@@ -491,7 +491,7 @@ void MenuInicial(){
 
 void MenuAdm(ClPointer pClients, int userIndex){
     limparTerminal();
-    printf("Bem vindo %s!!\n\n", pClients[userIndex].Nome);
+    printf("Bem vindo %s!!\n\n", pClients[userIndex].Name);
     sleep(2);
     printf("     _-+={Menu}=+-_     \n\n");
     printf("  {1} - Cadastrar Investidor   \n");
@@ -507,7 +507,7 @@ void MenuAdm(ClPointer pClients, int userIndex){
 
 void MenuInvestidor(ClPointer pClients, int userIndex){
     limparTerminal();
-    printf("Bem vindo %s!!\n\n", pClients[userIndex].Nome);
+    printf("Bem vindo %s!!\n\n", pClients[userIndex].Name);
     sleep(2);
     printf("     _-+={Menu}=+-_     \n\n");
     printf("  {1} - Consultar saldo   \n");
@@ -579,7 +579,7 @@ bool Login(ClPointer pClients, int clientsQuantity,int *indexClient) {
         for (indexPlayerLoop = 0; indexPlayerLoop < clientsQuantity; indexPlayerLoop++) {
             //Verifica se o CPF e senha são os mesmos para aquele index
             if (strcmp(pClients[indexPlayerLoop].Cpf, cpfEntrada) == 0 &&
-                strcmp(pClients[indexPlayerLoop].Senha, passEntrada) == 0) {
+                strcmp(pClients[indexPlayerLoop].Pass, passEntrada) == 0) {
                 //caso a condição seja verdadeira, ele faz userAchado = false
                 userAchado = true;
                 break;
@@ -590,7 +590,7 @@ bool Login(ClPointer pClients, int clientsQuantity,int *indexClient) {
         if (userAchado) {
             //Salva o index do usuario 
             *indexClient = indexPlayerLoop;
-            printf("Bem-vindo, %s! Você está logado!\n", pClients[indexPlayerLoop].Nome);
+            printf("Bem-vindo, %s! Você está logado!\n", pClients[indexPlayerLoop].Name);
             Passar();
             limparTerminal();
             return true;
