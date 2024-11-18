@@ -75,6 +75,13 @@ void AddClient(CoPointer pCoins, ClPointer *pClients, DataQuantity *dataQuantity
 bool RemoveCoin(ClPointer pClients, CoPointer *pCoins, int indexToRemove, DataQuantity *dataQuantity);
 bool RemoveClient(ClPointer *pClients, int indexToRemove, DataQuantity *dataQuantity);
 void AddExtract(ClPointer *pClients, int clientIndex, char transactionType, Coin coin, int quantity);
+void limparTerminal();
+void limparBufferEntrada();
+void Passar();
+void MenuInicial();
+void MenuAdm(ClPointer pClients, int userIndex);
+void MenuInvestidor(ClPointer pClients, int userIndex);
+bool Login(ClPointer pClients, int clientsQuantity,int *indexClient);
 //------------------------------------------------------------------------//
 
 
