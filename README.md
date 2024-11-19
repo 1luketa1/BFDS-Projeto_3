@@ -28,7 +28,16 @@ Kleber     |00000000099 |000009| 1000.00|       0.00|0.00|0.00
 X AE A-Xii |00000000100 |000010|10340.01| 9999999.50|0.86|7.00
 ```
 
-Apos a efetuação do login, você será recebido por um menu contendo as opções da exchange. Qualquer um dos perfis pode usar as opções do programa (as funções de venda exigem que haja os valores que se deseja vender).
+Após a efetuação do login, você será recebido por um menu contendo as opções da exchange. Qualquer um dos perfis pode usar as opções 1 a 8 do programa (as funções de venda exigem que haja os valores que se deseja vender). Entretanto, alguns perfis são de Administradores da Exchange. Eles detém as seguintes funções:
+* Cadastrar novo investidor;
+* Excluir investidor, contendo um sistema de confirmação da operação;
+* Cadastro de criptomoeda, informando Nome, Cotação Inicial, Taxa de Compra e Taxa de Venda;
+* Excluir criptomoeda, contendo u sistema de confirmação da exclusão;
+* Consultar saldo de um investidor;
+* Consultar extrado de um investidor;
+* Atualizar cotação de criptomoedas.
+
+Os perfis administradores estão destacados na tabela com um *.
 
 # Participantes:
 
