@@ -11,7 +11,7 @@
 typedef struct Currency{
 
     char Name[20];
-    int quantity;
+    double quantity;
 
 }Currency, *CuPointer;
 
@@ -75,6 +75,23 @@ void AddClient(CoPointer pCoins, ClPointer *pClients, DataQuantity *dataQuantity
 bool RemoveCoin(ClPointer pClients, CoPointer *pCoins, int indexToRemove, DataQuantity *dataQuantity);
 bool RemoveClient(ClPointer *pClients, int indexToRemove, DataQuantity *dataQuantity);
 void AddExtract(ClPointer *pClients, int clientIndex, char transactionType, Coin coin, int quantity);
+void limparTerminal();
+void MenuInicial();
+bool Login(ClPointer pClients, int clientsQuantity,int *indexClient);
+void Passar();
+void limparBufferEntrada();
+void MenuAdm(ClPointer pClients, int userIndex);
+void MenuInvestidor(ClPointer pClients, int userIndex);
+void AtualizarCotacoes(CoPointer *pCriptos, int criptosQuantity);
+void VenderCriptomoedas(ClPointer *pClients, int userIndex, CoPointer pCriptos, DataQuantity dataQuantities);
+void ComprarCriptomoedas(ClPointer *pClients, int userIndex, CoPointer pCriptos, DataQuantity dataQuantities);
+void SacarReais(ClPointer *pClients, int userIndex, CoPointer pCriptos);
+void DepositarReais(ClPointer *pClients, int userIndex, CoPointer pCriptos);
+void ConsultarSaldo(ClPointer pClients, int userIndex, DataQuantity dataQuantities);
+int PedirSenha(char userSenhaCerta[7]);
+void ConsultarExtratoInvestidor(ClPointer pClients, DataQuantity dataQuantities);
+void ConsultarSaldoInvestidor(ClPointer pClients, DataQuantity dataQuantities);
+int isdigit( int arg );
 //------------------------------------------------------------------------//
 
 
@@ -112,10 +129,9 @@ int main(){
     //------------------------------------------------------------------------//
 
 
-    
     /*Atribuções das variavies*/
     //------------------------------------------------------------------------//
-    dBDataQuantities = fopen(dataQuantities, 'r');
+    dBDataQuantities = fopen(dataQuantities, "r");
     if(dBDataQuantities == NULL){
         perror("falha ao abrir \"DataQuantity.bin\"");
         return 1;
@@ -220,14 +236,19 @@ void printExtrato(ClPointer pClients, DataQuantity dataQuantities, int index){
             printf("Extratos:\n");
 
             for(int IndexExtract = 0; IndexExtract < 100; IndexExtract++){
-                printf("||Tipo de Transação: %s || Valor: %lf || Tipo de Transação: %s || Nome da Moeda: %s || Valor da Moeda: %lf || Taxa de Venda: %s "
-                "|| Taxa de Compra: %lf || ID do Extrato: %d || Quantidade Movida: %lf ||"
-                "Horário: %d:%d:%d ||\n", 
-                pClients[index].Extract[IndexExtract].TransactionType, pClients[index].Extract[IndexExtract].Coin.Name, 
-                pClients[index].Extract[IndexExtract].Coin.Value, pClients[index].Extract[IndexExtract].Coin.SellTax,
-                pClients[index].Extract[IndexExtract].Coin.BuyTax,pClients[index].Extract[IndexExtract].IDNumber,
-                pClients[index].Extract[IndexExtract].Quantity, pClients[index].Extract[IndexExtract].Date.tm_hour,
-                pClients[index].Extract[IndexExtract].Date.tm_min, pClients[index].Extract[IndexExtract].Date.tm_sec);
+                printf("|| Tipo de Transação: %c || Nome da Moeda: %s || Valor da Moeda: %.2lf || Taxa de Venda: %.2lf "
+                   "|| Taxa de Compra: %.2lf || ID do Extrato: %d || Quantidade Movida: %.2lf || "
+                   "Horário: %02d:%02d:%02d ||\n",
+                   pClients[index].Extract[IndexExtract].TransactionType, 
+                   pClients[index].Extract[IndexExtract].Coin.Name, 
+                   pClients[index].Extract[IndexExtract].Coin.Value, 
+                   pClients[index].Extract[IndexExtract].Coin.SellTax,
+                   pClients[index].Extract[IndexExtract].Coin.BuyTax,
+                   pClients[index].Extract[IndexExtract].IDNumber,
+                   pClients[index].Extract[IndexExtract].Quantity, 
+                   pClients[index].Extract[IndexExtract].Date.tm_hour,
+                   pClients[index].Extract[IndexExtract].Date.tm_min, 
+                   pClients[index].Extract[IndexExtract].Date.tm_sec);
             }
             printf("===============================\n");  
     }
@@ -280,7 +301,7 @@ void debugClient(ClPointer pClients, DataQuantity dataQuantities, int index){
 //------------------------------------------------------------------------//
 void SaveDataQuantity(DataQuantity dataQuantity, const char *dataQuantities){
     FILE* destino;
-    destino = fopen(dataQuantities, 'w');
+    destino = fopen(dataQuantities, "w");
     if(destino == NULL){
         perror("falha ao abrir o arquivo destino no \"SaveDataQuantity\"");
     }
@@ -343,7 +364,7 @@ void AddCoin(ClPointer *pClients, CoPointer *pCoins, DataQuantity *dataQuantity,
 
 void AddClient(CoPointer pCoins, ClPointer *pClients, DataQuantity *dataQuantity, bool isAdm, char *name, char *cpf, char *pass){
     if((*pClients) == NULL){
-        (*pClients) = (ClPointer)Calloc(1, sizeof(Client));
+        (*pClients) = (ClPointer)calloc(1, sizeof(Client));
     }
     dataQuantity[0].Clients++;
     (*pClients) = (ClPointer)realloc((*pClients), sizeof((*pClients)[0]) * dataQuantity[0].Clients);
@@ -374,7 +395,7 @@ bool RemoveCoin(ClPointer pClients, CoPointer *pCoins, int indexToRemove, DataQu
     }
     dataQuantity[0].Coins--;
     CuPointer tempCurrencies;
-    tempCurrencies = (CuPointer)Calloc(dataQuantity[0].Coins, sizeof(Currency));
+    tempCurrencies = (CuPointer)calloc(dataQuantity[0].Coins, sizeof(Currency));
     if(tempCurrencies == NULL){
         perror("erro ao alocar memoria para \"tempCurrencies\" em \"AddCoin\"");
         return false;
@@ -533,7 +554,7 @@ bool Login(ClPointer pClients, int clientsQuantity,int *indexClient) {
             limparTerminal();
             printf("\n-------------------Login-------------------\n");
             printf("\nInsira seu CPF: ");
-            scanf("%11s", &cpfEntrada); 
+            scanf("%11s", cpfEntrada); 
             limparBufferEntrada();
             if(strlen(cpfEntrada) != 11){
                 printf("Quantidade de caracteres inválida! O CPF deve ter 11 caracteres\n");
@@ -541,7 +562,7 @@ bool Login(ClPointer pClients, int clientsQuantity,int *indexClient) {
             }
             else{
                 printf("\nInsira sua Senha   : ");
-                scanf("%6s", &passEntrada);
+                scanf("%6s", passEntrada);
                 limparBufferEntrada();
                 if (strlen(passEntrada) != 6)
                 {
