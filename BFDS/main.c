@@ -195,6 +195,7 @@ int main(){
             limparTerminal();
                 //CHAMADA TEMPORARIA DE LOGIN, NECESSARIO CRIAR O DATAQUANTITY
             Login(pClients, 10, indexClient);
+            
         }
         //Caso não seja 1 ou 2
         else{
@@ -669,220 +670,220 @@ void AtualizarCotacoes(CoPointer *pCriptos, int criptosQuantity){
     limparTerminal();
 }
 
-void VenderCriptomoedas(ClPointer *pClients, int userIndex, CoPointer pCriptos, DataQuantity dataQuantities){
-    int coinIndex;
-    double quantity;
-    limparTerminal();
+// void VenderCriptomoedas(ClPointer *pClients, int userIndex, CoPointer pCriptos, DataQuantity dataQuantities){
+//     int coinIndex;
+//     double quantity;
+//     limparTerminal();
 
-    printf("Qual criptomoeda deseja vender?(responda usando o indice)\n");
-    for(int i = 0; i < dataQuantities.Coins; i++){
-        printf("|%s(%d): |%.2lf| |\n",pCriptos[i].Name, i, pCriptos[i].Value);
-    }
-    scanf(" %d", &coinIndex);
-    printf("Você tem %.2lf %s(s)\n", (*pClients)[userIndex].Currencies[coinIndex].quantity, (*pClients)[userIndex].Currencies[coinIndex].Name);
-    printf("Quantas quer vender?\n");
-    scanf(" %lf", &quantity);
-    if(quantity <= (*pClients)[userIndex].Currencies[coinIndex].quantity){
-        (*pClients)[userIndex].Currencies[coinIndex].quantity -= quantity;
-        (*pClients)[userIndex].Currencies[0].quantity += quantity * pCriptos[coinIndex].Value * (1 - pCriptos[coinIndex].SellTax);
-        AddExtract(pClients, userIndex, 'S', pCriptos[coinIndex], quantity);
-    }
-    else{
-        printf("Não tem moedas o suficiente");
-    }
-}
+//     printf("Qual criptomoeda deseja vender?(responda usando o indice)\n");
+//     for(int i = 0; i < dataQuantities.Coins; i++){
+//         printf("|%s(%d): |%.2lf| |\n",pCriptos[i].Name, i, pCriptos[i].Value);
+//     }
+//     scanf(" %d", &coinIndex);
+//     printf("Você tem %.2lf %s(s)\n", (*pClients)[userIndex].Currencies[coinIndex].quantity, (*pClients)[userIndex].Currencies[coinIndex].Name);
+//     printf("Quantas quer vender?\n");
+//     scanf(" %lf", &quantity);
+//     if(quantity <= (*pClients)[userIndex].Currencies[coinIndex].quantity){
+//         (*pClients)[userIndex].Currencies[coinIndex].quantity -= quantity;
+//         (*pClients)[userIndex].Currencies[0].quantity += quantity * pCriptos[coinIndex].Value * (1 - pCriptos[coinIndex].SellTax);
+//         AddExtract(pClients, userIndex, 'S', pCriptos[coinIndex], quantity);
+//     }
+//     else{
+//         printf("Não tem moedas o suficiente");
+//     }
+// }
 
-void ComprarCriptomoedas(CPointer pClients, int userIndex, MPointer bitcoin, MPointer ethereum, MPointer ripple, EPointer ppExtrato, char userSenha[7]){
+// void ComprarCriptomoedas(CPointer pClients, int userIndex, MPointer bitcoin, MPointer ethereum, MPointer ripple, EPointer ppExtrato, char userSenha[7]){
 
-    char respostaUser[20];
-    double valorCompra, valorFinal;
-    double taxa, valorCripto;
-    int opcaoMoeda;
-    int pedirSenhaSaque = PedirSenha(userSenha);
+//     char respostaUser[20];
+//     double valorCompra, valorFinal;
+//     double taxa, valorCripto;
+//     int opcaoMoeda;
+//     int pedirSenhaSaque = PedirSenha(userSenha);
 
-    limparTerminal();
+//     limparTerminal();
 
 
-    if(pedirSenhaSaque == 1){ 
-    printf("Qual criptomoeda deseja comprar?!\n");
-    printf("1 - Bitcoin\n");
-    printf("2 - Ethereum\n");
-    printf("3 - Ripple\n");
-    scanf("%d", &opcaoMoeda);
+//     if(pedirSenhaSaque == 1){ 
+//     printf("Qual criptomoeda deseja comprar?!\n");
+//     printf("1 - Bitcoin\n");
+//     printf("2 - Ethereum\n");
+//     printf("3 - Ripple\n");
+//     scanf("%d", &opcaoMoeda);
 
-    limparTerminal();
+//     limparTerminal();
 
-    printf("Digite o valor que você deseja investir (em reais):\n");
-    scanf("%lf", &valorCompra);
+//     printf("Digite o valor que você deseja investir (em reais):\n");
+//     scanf("%lf", &valorCompra);
 
-    limparTerminal();
+//     limparTerminal();
 
-    if(valorCompra <= 0){
-        printf("O valor deve ser maior que zero!\n");
-        getchar();
-        return;
-    }
+//     if(valorCompra <= 0){
+//         printf("O valor deve ser maior que zero!\n");
+//         getchar();
+//         return;
+//     }
 
-    if (valorCompra > pClients[userIndex].Reais) {
-        printf("Saldo insuficiente para realizar a operação!.\n");
-        getchar();
-        return;
-    }
+//     if (valorCompra > pClients[userIndex].Reais) {
+//         printf("Saldo insuficiente para realizar a operação!.\n");
+//         getchar();
+//         return;
+//     }
 
-    switch(opcaoMoeda) {
-    case 1: 
-        taxa = valorCompra * bitcoin->TaxaCompra;  
-        valorCripto = valorCompra / bitcoin->Valor;  
-        printf("Com o valor investido você comprará %.10lf Bitcoins, com uma taxa de R$%.2lf\nO total da transação será de R$%.2lf.\nConfirmar? (s/n)\n", valorCripto, taxa, (valorCompra+taxa));
-        break;
-    case 2: 
-        taxa = valorCompra * ethereum->TaxaCompra;  
-        valorCripto = valorCompra / ethereum->Valor;  
-        printf("Com o valor investido você comprará %.10lf Ethereums, com uma taxa de R$%.2lf\nO total da transação será de R$%.2lf.\nConfirmar? (s/n)\n", valorCripto, taxa, (valorCompra+taxa));
-        break;
-    case 3: 
-        taxa = valorCompra * ripple->TaxaCompra;  
-        valorCripto = valorCompra / ripple->Valor;  
-        printf("Com o valor investido você comprará %.10lf Ripples, com uma taxa de R$%.2lf\nO total da transação será de R$%.2lf.\nConfirmar? (s/n)\n", valorCripto, taxa, (valorCompra+taxa));
-        break;
-    default:
-        printf("Opção inválida.\n");
-        return;
-    }
+//     switch(opcaoMoeda) {
+//     case 1: 
+//         taxa = valorCompra * bitcoin->TaxaCompra;  
+//         valorCripto = valorCompra / bitcoin->Valor;  
+//         printf("Com o valor investido você comprará %.10lf Bitcoins, com uma taxa de R$%.2lf\nO total da transação será de R$%.2lf.\nConfirmar? (s/n)\n", valorCripto, taxa, (valorCompra+taxa));
+//         break;
+//     case 2: 
+//         taxa = valorCompra * ethereum->TaxaCompra;  
+//         valorCripto = valorCompra / ethereum->Valor;  
+//         printf("Com o valor investido você comprará %.10lf Ethereums, com uma taxa de R$%.2lf\nO total da transação será de R$%.2lf.\nConfirmar? (s/n)\n", valorCripto, taxa, (valorCompra+taxa));
+//         break;
+//     case 3: 
+//         taxa = valorCompra * ripple->TaxaCompra;  
+//         valorCripto = valorCompra / ripple->Valor;  
+//         printf("Com o valor investido você comprará %.10lf Ripples, com uma taxa de R$%.2lf\nO total da transação será de R$%.2lf.\nConfirmar? (s/n)\n", valorCripto, taxa, (valorCompra+taxa));
+//         break;
+//     default:
+//         printf("Opção inválida.\n");
+//         return;
+//     }
 
     
-    scanf(" %s", respostaUser);
-    if (respostaUser[0] == 's') {
-        pClients[userIndex].Reais -= (valorCompra + taxa); 
+//     scanf(" %s", respostaUser);
+//     if (respostaUser[0] == 's') {
+//         pClients[userIndex].Reais -= (valorCompra + taxa); 
 
 
-        switch(opcaoMoeda) {
-            case 1:
-                pClients[userIndex].Bitcoin += valorCripto;
-                break;
-            case 2:
-                pClients[userIndex].Ethereum += valorCripto;
-                break;
-            case 3:
-                pClients[userIndex].Ripple += valorCripto;
-                break;
-        }
+//         switch(opcaoMoeda) {
+//             case 1:
+//                 pClients[userIndex].Bitcoin += valorCripto;
+//                 break;
+//             case 2:
+//                 pClients[userIndex].Ethereum += valorCripto;
+//                 break;
+//             case 3:
+//                 pClients[userIndex].Ripple += valorCripto;
+//                 break;
+//         }
 
-        switch(opcaoMoeda) {
-        case 1: 
-            AdicionarExtrato(ppExtrato, bitcoin, "Bitcoin", pClients, userIndex, 'C', valorCripto); 
-            break;
-        case 2: 
-            AdicionarExtrato(ppExtrato, ethereum, "Ethereum", pClients, userIndex, 'C', valorCripto);
-            break;
-        case 3: 
-            AdicionarExtrato(ppExtrato, ripple, "Ripple", pClients, userIndex, 'C', valorCripto); 
-            break;
-        default:
-            printf("[ERRO] Extrato Inválido.\n");
-            getchar();
-            return;
-        }
+//         switch(opcaoMoeda) {
+//         case 1: 
+//             AdicionarExtrato(ppExtrato, bitcoin, "Bitcoin", pClients, userIndex, 'C', valorCripto); 
+//             break;
+//         case 2: 
+//             AdicionarExtrato(ppExtrato, ethereum, "Ethereum", pClients, userIndex, 'C', valorCripto);
+//             break;
+//         case 3: 
+//             AdicionarExtrato(ppExtrato, ripple, "Ripple", pClients, userIndex, 'C', valorCripto); 
+//             break;
+//         default:
+//             printf("[ERRO] Extrato Inválido.\n");
+//             getchar();
+//             return;
+//         }
 
-        limparTerminal();
-        printf("Compra realizada com sucesso!\n");
-        getchar();
-    } else {
-        limparTerminal();
-        printf("Compra cancelada!\n");
-        getchar();
-    }
-    }
-    else{
-        printf("Senha incorreta! Operação cancelada.\n");
-        getchar();
+//         limparTerminal();
+//         printf("Compra realizada com sucesso!\n");
+//         getchar();
+//     } else {
+//         limparTerminal();
+//         printf("Compra cancelada!\n");
+//         getchar();
+//     }
+//     }
+//     else{
+//         printf("Senha incorreta! Operação cancelada.\n");
+//         getchar();
 
-    }
-
-
-}
-
-void SacarReais(CPointer pClients, int userIndex, char userSenha[7], EPointer ppExtrato){
+//     }
 
 
-    limparTerminal();
+// }
+
+// void SacarReais(CPointer pClients, int userIndex, char userSenha[7], EPointer ppExtrato){
 
 
-    int pedirSenhaSaque = PedirSenha(userSenha);
-    double saque;
+//     limparTerminal();
+
+
+//     int pedirSenhaSaque = PedirSenha(userSenha);
+//     double saque;
     
-    if(pedirSenhaSaque == 1){  
-        printf("Quantos reais gostaria de sacar?: ");
-        scanf(" %lf", &saque);
+//     if(pedirSenhaSaque == 1){  
+//         printf("Quantos reais gostaria de sacar?: ");
+//         scanf(" %lf", &saque);
 
-        if(saque <= 0) { 
-            printf("[ERRO]! Valor inválido.\n O saque deve ser maior que zero.\n");
-            getchar();
-            return;
-        }
+//         if(saque <= 0) { 
+//             printf("[ERRO]! Valor inválido.\n O saque deve ser maior que zero.\n");
+//             getchar();
+//             return;
+//         }
 
-        if(pClients[userIndex].Reais < saque){  
-            printf("Em sua conta não a saldo suficiente para realizar essa operação!\n");
+//         if(pClients[userIndex].Reais < saque){  
+//             printf("Em sua conta não a saldo suficiente para realizar essa operação!\n");
 
-            getchar();
-        }
-        else{
-            pClients[userIndex].Reais = pClients[userIndex].Reais - saque;  
+//             getchar();
+//         }
+//         else{
+//             pClients[userIndex].Reais = pClients[userIndex].Reais - saque;  
 
-            printf("R$ %.2lf sacados da sua conta!\n", saque);
-            printf("Saldo Atual: R$ %.2lf\n", pClients[userIndex].Reais);
-            AdicionarExtrato(ppExtrato, NULL, "Reais", pClients, userIndex, 'S', saque);
+//             printf("R$ %.2lf sacados da sua conta!\n", saque);
+//             printf("Saldo Atual: R$ %.2lf\n", pClients[userIndex].Reais);
+//             AdicionarExtrato(ppExtrato, NULL, "Reais", pClients, userIndex, 'S', saque);
 
-            getchar();
-        }
-    }
-    else{
-        printf("Senha incorreta! Operação cancelada.\n");
-        getchar();
+//             getchar();
+//         }
+//     }
+//     else{
+//         printf("Senha incorreta! Operação cancelada.\n");
+//         getchar();
 
-    }
-}
+//     }
+// }
 
-void DepositarReais(CPointer pClients, int userIndex, EPointer ppExtrato){
+// void DepositarReais(CPointer pClients, int userIndex, EPointer ppExtrato){
 
-    limparTerminal();
+//     limparTerminal();
 
-    double deposito;
-    printf("Quantos reais gostaria de depositar?: ");
-    scanf(" %lf", &deposito);
+//     double deposito;
+//     printf("Quantos reais gostaria de depositar?: ");
+//     scanf(" %lf", &deposito);
     
-    if(deposito <= 0) { 
-        printf("[ERRO]! Valor inválido.\n O saque deve ser maior que zero.\n");
-        getchar(); 
-        return;
-    }
+//     if(deposito <= 0) { 
+//         printf("[ERRO]! Valor inválido.\n O saque deve ser maior que zero.\n");
+//         getchar(); 
+//         return;
+//     }
 
 
-    pClients[userIndex].Reais += deposito;
+//     pClients[userIndex].Reais += deposito;
     
-    AdicionarExtrato(ppExtrato, NULL, "Reais", pClients, userIndex, 'D', deposito);
+//     AdicionarExtrato(ppExtrato, NULL, "Reais", pClients, userIndex, 'D', deposito);
 
-    printf("Você depositou R$ %.2lf\nTotal na conta: R$ %.2lf\n",deposito, pClients[userIndex].Reais); 
+//     printf("Você depositou R$ %.2lf\nTotal na conta: R$ %.2lf\n",deposito, pClients[userIndex].Reais); 
 
-    getchar();
-}
+//     getchar();
+// }
 
-void ConsultarSaldo(CPointer pClients, int userIndex){
+// void ConsultarSaldo(CPointer pClients, int userIndex){
 
-    limparTerminal();
+//     limparTerminal();
 
-    printf("===== Consulta de Saldo =====\n\n");
-    printf("Nome: %s\n", pClients[userIndex].Nome);
-    printf("Saldo em Reais: R$ %.2lf\n", pClients[userIndex].Reais);
-    printf("Saldo em Bitcoin: %.8lf BTC\n", pClients[userIndex].Bitcoin);
-    printf("Saldo em Ethereum: %.8lf ETH\n", pClients[userIndex].Ethereum);
-    printf("Saldo em Ripple: %.8lf XRP\n", pClients[userIndex].Ripple);
+//     printf("===== Consulta de Saldo =====\n\n");
+//     printf("Nome: %s\n", pClients[userIndex].Nome);
+//     printf("Saldo em Reais: R$ %.2lf\n", pClients[userIndex].Reais);
+//     printf("Saldo em Bitcoin: %.8lf BTC\n", pClients[userIndex].Bitcoin);
+//     printf("Saldo em Ethereum: %.8lf ETH\n", pClients[userIndex].Ethereum);
+//     printf("Saldo em Ripple: %.8lf XRP\n", pClients[userIndex].Ripple);
 
-    getchar();
+//     getchar();
 
 
 
-}
+// }
 
 int PedirSenha(char userSenhaCerta[7]){
     //retorna 1 caso o usuario tenha acertado a senha, 0 caso tenha errado e -1 caso o usuario deseja encerrar a tentativa;
@@ -927,5 +928,29 @@ int PedirSenha(char userSenhaCerta[7]){
         return 1;
     }
 }
+
+
+void ConsultarExtratoInvestidor(ClPointer pClients, DataQuantity dataQuantities) {
+    char cpfInvestidor[12];
+    bool clienteEncontrado = false;
+
+    printf("Digite o CPF do investidor (somente números): ");
+    scanf("%11s", cpfInvestidor);
+
+    for (int i = 0; i < dataQuantities.Clients; i++) {
+        if (strcmp(pClients[i].Cpf, cpfInvestidor) == 0) {
+            clienteEncontrado = true;
+            printf("\n=== Extrato do Investidor ===\n");
+            printExtrato(pClients, dataQuantities, i);
+            break;
+        }
+    }
+
+    if (!clienteEncontrado) {
+        printf("\nInvestidor não encontrado.\n");
+    }
+}
+
+
 
 //------------------------------------------------------------------------//
