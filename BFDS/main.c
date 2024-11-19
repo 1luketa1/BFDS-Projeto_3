@@ -128,7 +128,14 @@ int main(){
     char lineRead[256];
     //------------------------------------------------------------------------//
 
+    // dataQuantity.Coins = 0;
+    // dataQuantity.Clients = 0;
+    // AddCoin(&pClients, &pCoins, &dataQuantity, "reais", 1,0,0);
+    // SaveDataQuantity(dataQuantity, dataQuantities);
+    // SaveCoin(pCoins, dataQuantity.Coins, coins);
 
+
+    
     /*Atribuções das variavies*/
     //------------------------------------------------------------------------//
     dBDataQuantities = fopen(dataQuantities, "r");
