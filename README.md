@@ -13,19 +13,20 @@ O projeto é a simuação de uma exchange de criptomoedas (Bitcoin, Ethereum e R
 
 O programa pode ser executado tanto em IDEs instalados em uma máquina quanto em IDEs online. Caso o programa que você está usando não tenha embutido, certifique-se de instalar a extensão de C/C++. Caso você esteja usando o Replit, retire todos os arquivos da pasta "BFDS" ao descompactar o arquivo .zip. Ao executar o arquivo "main.c", uma tela de login será aberta. Segue a lista dos perfis criados:
 
-Em ordem: Nome, CPF, senha, R$ na conta, BTC na conta, ETH na conta, XRP na conta.
+Em ordem: Nome, CPF, senha, R$ na conta, Bitcoin na conta, Ethereum na conta, Ripple na conta, Catnip na conta, BFDSCOIN na conta. (As últimas duas moedas foram criadas para o
+aplicativo.)
 
 ```
-Josias     |00000000011 |000001|52742.94|       0.00|0.00|0.00
-Elvis      |00000000022 |000002|   10.00|       0.00|0.00|0.00
-Edmilson   |00000000033 |000003|   10.00|       0.00|0.00|0.00
-Valmira    |00000000044 |000004|   10.00|       0.00|0.00|0.00
-Olga       |00000000055 |000005|   10.00|       0.00|0.00|0.00
-Cleide     |00000000066 |000006| 2050.00|       0.00|0.00|0.00
-Dalva      |00000000077 |000007|    0.00|       0.00|0.00|0.00
-Carlinhos  |00000000088 |000008| 2050.00|       0.00|0.00|0.00
-Kleber     |00000000099 |000009| 1000.00|       0.00|0.00|0.00
-X AE A-Xii |00000000100 |000010|10340.01| 9999999.50|0.86|7.00
+Josias*    |00000000011 |000001|    0.00|    0.00|    0.00|    0.00|    0.00|    0.00|
+Elvis      |00000000022 |000002|    0.00|    0.00|    0.00|    0.00|    0.00|    0.00|
+Edmilson   |00000000033 |000003|    0.00|    0.00|    0.00|    0.00|    0.00|    0.00|
+Valmira    |00000000044 |000004|    0.00|    0.00|    0.00|    0.00|    0.00|    0.00|
+Olga       |00000000055 |000005|    0.00|    0.00|    0.00|    0.00|    0.00|    0.00|
+Cleide     |00000000066 |000006|    0.00|    0.00|    0.00|    0.00|    0.00|    0.00|
+Dalva      |00000000077 |000007|    0.00|    0.00|    0.00|    0.00|    0.00|    0.00|
+Carlinhos  |00000000088 |000008|    0.00|    0.00|    0.00|    0.00|    0.00|    0.00|
+Kleber     |00000000099 |000009|    0.00|    0.00|    0.00|    0.00|    0.00|    0.00|
+X AE A-Xii |00000000100 |000010|    0.00|    0.00|    0.00|    0.00|    0.00|    0.00|
 ```
 
 Após a efetuação do login, você será recebido por um menu contendo as opções da exchange. Qualquer um dos perfis pode usar as opções 1 a 8 do programa (as funções de venda exigem que haja os valores que se deseja vender). Entretanto, alguns perfis são de Administradores da Exchange. Eles detém as seguintes funções:
