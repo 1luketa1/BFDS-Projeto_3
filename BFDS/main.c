@@ -256,7 +256,8 @@ int main(){
     /*Principal do usuario*/
     //------------------------------------------------------------------------//
     char respostaUserPP;
-    int indexClient;
+    int indexClient = -1;
+    bool sair = false;
     while(true){
 
         limparTerminal();
@@ -323,9 +324,10 @@ int main(){
         //Login
         else if(respostaUserPP == '2'){
             limparTerminal();
-            Login(pClients, dataQuantity.Clients, &indexClient);
+            if(Login(pClients, dataQuantity.Clients, &indexClient)){
 
             if(pClients[indexClient].IsAdm){
+            while(true){
                 MenuAdm(pClients, indexClient);
                 scanf(" %c", &respostaUserPP);
 
@@ -384,10 +386,13 @@ int main(){
 
                 }
 
-                if(respostaUserPP == '2'){
+                else if(respostaUserPP == '2'){
                     char cpfremove[12], confirma;
                     bool userAchado;
                     int indexPlayerLoop;
+
+                    printf("CPF para remoção: \n");
+                    scanf(" %11s",cpfremove);
 
                     for ( indexPlayerLoop = 0; indexPlayerLoop < dataQuantity.Clients; indexPlayerLoop++) {
                         //Verifica se o CPF e senha são os mesmos para aquele index
@@ -418,7 +423,7 @@ int main(){
                     }
                             
                 }
-                if(respostaUserPP == '3'){
+                else if(respostaUserPP == '3'){
                     char nome[20];
                     double valor, selltax,buytax;
 
@@ -432,41 +437,40 @@ int main(){
                     scanf(" %lf", &buytax);
 
 
-                    AddCoin(&pClients, &pCoins,&dataQuantities,&nome,valor,selltax,buytax);
+                    AddCoin(&pClients, &pCoins,&dataQuantity,nome,valor,selltax,buytax);
 
                 }
-                if(respostaUserPP == '4'){
-
-
-
-
+                else if(respostaUserPP == '4'){
 
 
 
                 }
-                if(respostaUserPP == '5'){
+                else if(respostaUserPP == '5'){
                     ConsultarSaldoInvestidor(pClients, dataQuantity);
 
                 }
 
 
-                if(respostaUserPP == '6'){
+                else if(respostaUserPP == '6'){
                     ConsultarExtratoInvestidor(pClients, dataQuantity);
                 }
 
-                if(respostaUserPP == '7'){
+                else if(respostaUserPP == '7'){
                     //AtualizarCotacoes(pCriptos, );
                 }
-                if(respostaUserPP == '8'){
+                else if(respostaUserPP == '8'){
+                    sair = true;
                     break;
                 }
                 else{
                     printf("Valor inválido!\n");
                     Passar();
                 }
+            }
 
             }
             else{
+                while(true){
                 MenuInvestidor(pClients, indexClient);
                 scanf(" %c", &respostaUserPP);
 
@@ -476,18 +480,22 @@ int main(){
                 else if(respostaUserPP == '4') SacarReais(&pClients, indexClient, pCoins);
                 else if(respostaUserPP == '5') ComprarCriptomoedas(&pClients, indexClient, pCoins, dataQuantity);
                 else if(respostaUserPP == '6') VenderCriptomoedas(&pClients, indexClient, pCoins, dataQuantity);
-                else if(respostaUserPP == '7') AtualizarCotacoes(pCoins, dataQuantity.Coins);
+                else if(respostaUserPP == '7') AtualizarCotacoes(&pCoins, dataQuantity.Coins);
                 else if(respostaUserPP == '8') {
+                    sair = true;
                     break;
+                }
                 }
 
 
 
             }
-            SaveClient(pClients,dataQuantity.Clients,clients);
-            SaveCoin(pCoins,dataQuantity.Coins,coins);
-            SaveCurrencies(pClients,pCurrencies,dataQuantity,currencies);
-            SaveDataQuantity(dataQuantity,dataQuantities);
+            }
+            else{
+                printf("Falha ao logar!\n");
+                Passar();
+            }
+
         }
         //Caso não seja 1 ou 2
         else{
@@ -495,10 +503,13 @@ int main(){
             printf("Input inválido, tente novamente...");
             Passar();
         }
+        
+        if(sair){
+            break;
+        }
     }
     //------------------------------------------------------------------------//
     free(pCoins);
-    free(pCurrencies);
     FreePClients(pClients, dataQuantity);
 }
 //------------------------------------------------------------------------//
