@@ -117,7 +117,8 @@ int main(){
     DataQuantity dataQuantity;
     dataQuantity.Coins = -1;
     dataQuantity.Clients = -1;
-
+    dataQuantity.Coins = 0;
+    dataQuantity.Clients = 0;
 
     CoPointer pCoins = NULL;
 
@@ -136,7 +137,7 @@ int main(){
 
     /*Atribuções das variavies*/
     //------------------------------------------------------------------------//
-    dBDataQuantities = fopen(dataQuantities, "r");
+    /*dBDataQuantities = fopen(dataQuantities, "r");
     if(dBDataQuantities == NULL){
         perror("falha ao abrir \"DataQuantity.txt\"");
         return 1;
@@ -161,9 +162,9 @@ int main(){
         return 1;
     } 
     fread(pCoins, sizeof(Coin), dataQuantity.Coins, dBCoins);
-    fclose(dBCoins);
+    fclose(dBCoins);*/
 
-    pCurrencies = (CuPointer *)calloc(dataQuantity.Clients, sizeof(CuPointer));
+    pCurrencies = (CuPointer*)calloc(dataQuantity.Clients, sizeof(CuPointer));
     if(pCurrencies == NULL){
         perror("falha ao alocar memoria para \"pCurrencies\"");
         return 2;
@@ -175,11 +176,7 @@ int main(){
             return 2;
         }
     }
-    if(pCurrencies == NULL){
-        perror("falha ao alocar memoria para \"pCurrencies\"");
-        return 2;
-    }
-    dBCurrencies = fopen(currencies, "rb");
+    /*dBCurrencies = fopen(currencies, "rb");
     if(dBCurrencies == NULL){
         perror("falha ao abrir \"currencies.bin\"");
         return 1;
@@ -187,13 +184,13 @@ int main(){
     for (int i = 0; i < dataQuantity.Clients; i++){
         fread(pCurrencies[i], sizeof(Currency), dataQuantity.Coins, dBCurrencies);
     }
-    fclose(dBCurrencies);
+    fclose(dBCurrencies);*/
 
 
 
     /*Declarações de dados*/
     //------------------------------------------------------------------------//
-    /*dataQuantity.Coins = 0;
+    dataQuantity.Coins = 0;
     dataQuantity.Clients = 0;
 
     AddClient(pCoins, &pClients,&dataQuantity,true,"Josias","00000000011","000001");
@@ -217,12 +214,12 @@ int main(){
     SaveClient(pClients,dataQuantity.Clients,clients);
     SaveCurrencies(pClients, pCurrencies,dataQuantity,currencies);
     SaveCoin(pCoins,dataQuantity.Coins,coins);
-    SaveDataQuantity(dataQuantity,dataQuantities);*/
+    SaveDataQuantity(dataQuantity,dataQuantities);
     //------------------------------------------------------------------------//
 
 
 
-    pClients = (ClPointer)calloc(dataQuantity.Clients, sizeof(Client));
+    /*pClients = (ClPointer)calloc(dataQuantity.Clients, sizeof(Client));
     if(pClients == NULL){
         perror("falha ao alocar memoria para \"pClients\"");
         return 2;
@@ -245,7 +242,7 @@ int main(){
         for(int j = 0; j < dataQuantity.Coins; j++){
             pClients[i].Currencies[j] = pCurrencies[i][j];
         }
-    }
+    }*/
     //------------------------------------------------------------------------//
     
     printf("AMOSTRAR CLRIENTES:\n\n");
@@ -402,9 +399,9 @@ int main(){
                     }
                     if(userAchado){
                         printf("Quer mesmo excluir(s/n)?\n");
-                        scanf("%c", confirma);
+                        scanf("%c", &confirma);
                         if(confirma == 's' || confirma == 'S'){
-                            RemoveClient(pClients, indexPlayerLoop, dataQuantities);
+                            RemoveClient(&pClients, indexPlayerLoop, &dataQuantity);
                         }
                         else if(confirma == 'n' || confirma == 'N'){
                             printf("Você negou a confirmação!\n");
@@ -423,19 +420,19 @@ int main(){
                 }
                 if(respostaUserPP == '3'){
                     char nome[20];
-                    int valor, selltax,buytax;
+                    double valor, selltax,buytax;
 
                     printf("Nome da moeda: ");
                     scanf(" %s", nome);
                     printf("Valor: ");
-                    scanf(" %lf", valor);
+                    scanf(" %lf", &valor);
                     printf("Selltax: ");
-                    scanf(" %lf", selltax);
+                    scanf(" %lf", &selltax);
                     printf("buytax: ");
-                    scanf(" %lf", buytax);
+                    scanf(" %lf", &buytax);
 
 
-                    AddCoin(&pClients, &pCoins,&dataQuantities,nome,valor,selltax,buytax);
+                    AddCoin(&pClients, &pCoins,&dataQuantities,&nome,valor,selltax,buytax);
 
                 }
                 if(respostaUserPP == '4'){
@@ -475,11 +472,11 @@ int main(){
 
                 if(respostaUserPP == '1') ConsultarSaldo(pClients, indexClient, dataQuantity);
                 else if(respostaUserPP == '2') printExtrato(pClients, dataQuantity, indexClient);
-                else if(respostaUserPP == '3') DepositarReais(&pClients, indexClient, pCripto);
-                else if(respostaUserPP == '4') SacarReais(&pClients, indexClient, pCriptos);
-                else if(respostaUserPP == '5') ComprarCriptomoedas(&pClients, indexClient, pCriptos, dataQuantity);
-                else if(respostaUserPP == '6') VenderCriptomoedas(&pClients, indexClient, pCriptos, dataQuantity);
-                else if(respostaUserPP == '7') AtualizarCotacoes(pCriptos, dataQuantity.Coins);
+                else if(respostaUserPP == '3') DepositarReais(&pClients, indexClient, pCoins);
+                else if(respostaUserPP == '4') SacarReais(&pClients, indexClient, pCoins);
+                else if(respostaUserPP == '5') ComprarCriptomoedas(&pClients, indexClient, pCoins, dataQuantity);
+                else if(respostaUserPP == '6') VenderCriptomoedas(&pClients, indexClient, pCoins, dataQuantity);
+                else if(respostaUserPP == '7') AtualizarCotacoes(pCoins, dataQuantity.Coins);
                 else if(respostaUserPP == '8') {
                     break;
                 }
@@ -487,7 +484,10 @@ int main(){
 
 
             }
-
+            SaveClient(pClients,dataQuantity.Clients,clients);
+            SaveCoin(pCoins,dataQuantity.Coins,coins);
+            SaveCurrencies(pClients,pCurrencies,dataQuantity,currencies);
+            SaveDataQuantity(dataQuantity,dataQuantities);
         }
         //Caso não seja 1 ou 2
         else{
@@ -498,6 +498,7 @@ int main(){
     }
     //------------------------------------------------------------------------//
     free(pCoins);
+    free(pCurrencies);
     FreePClients(pClients, dataQuantity);
 }
 //------------------------------------------------------------------------//
@@ -650,7 +651,7 @@ void SaveCurrencies(ClPointer pClients, CuPointer *pCurrencies, DataQuantity dat
     }
     for (int i = 0; i < dataQuantity.Clients; i++){
         for(int j = 0; j < dataQuantity.Coins; j++){
-            pClients[i].Currencies[j] = pCurrencies[i][j];
+            pCurrencies[i][j] = pClients[i].Currencies[j];
         }
     }
     
