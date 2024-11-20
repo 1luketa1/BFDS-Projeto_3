@@ -68,6 +68,7 @@ void debugCoin(CoPointer pCoins, DataQuantity dataQuantity, int index);
 void debugClient(ClPointer ClPointer, DataQuantity dataQuantity, int index);
 void SaveDataQuantity(DataQuantity dataQuantity, const char *dataQuantities);
 void SaveCoin(CoPointer pCoins, int coinsQuantity, const char *coins);
+void SaveCurrencies(ClPointer pClients, CuPointer *pCurrencies, DataQuantity dataQuantity, const char *currencies);
 void SaveClient(ClPointer pClients, int clientsQuantity, const char *clients);
 void FreePClients(ClPointer pClients, DataQuantity dataQuantity);
 void AddCoin(ClPointer *pClients, CoPointer *pCoins, DataQuantity *dataQuantity, char *name, double value, double sellTax, double buyTax);
@@ -107,8 +108,8 @@ int main(){
     tzset();
     srand(time(NULL));
 
-    FILE *dBDataQuantities, *dBCoins, *dBClients;
-    const char *dataQuantities = "DataQuantity.bin", *coins = "Coin.bin", *clients = "Clients.bin";
+    FILE *dBDataQuantities, *dBCoins, *dBClients, *dBCurrencies;
+    const char *dataQuantities = "DataQuantity.txt", *coins = "Coin.bin", *clients = "Clients.bin", *currencies = "currencies.bin";
 
 
     DataQuantity dataQuantity;
@@ -117,9 +118,10 @@ int main(){
 
 
     CoPointer pCoins = NULL;
+
+    CuPointer *pCurrencies = NULL;
     
     ClPointer pClients = NULL;
-
 
     int loggedClientIndex = -1;
     ClPointer loggedClient = NULL;
@@ -128,19 +130,13 @@ int main(){
     char lineRead[256];
     //------------------------------------------------------------------------//
 
-    // dataQuantity.Coins = 0;
-    // dataQuantity.Clients = 0;
-    // AddCoin(&pClients, &pCoins, &dataQuantity, "reais", 1,0,0);
-    // SaveDataQuantity(dataQuantity, dataQuantities);
-    // SaveCoin(pCoins, dataQuantity.Coins, coins);
 
 
-    
     /*Atribuções das variavies*/
     //------------------------------------------------------------------------//
     dBDataQuantities = fopen(dataQuantities, "r");
     if(dBDataQuantities == NULL){
-        perror("falha ao abrir \"DataQuantity.bin\"");
+        perror("falha ao abrir \"DataQuantity.txt\"");
         return 1;
     }     
     fgets(lineRead, sizeof(lineRead), dBDataQuantities);
@@ -165,6 +161,65 @@ int main(){
     fread(pCoins, sizeof(Coin), dataQuantity.Coins, dBCoins);
     fclose(dBCoins);
 
+    pCurrencies = (CuPointer *)calloc(dataQuantity.Clients, sizeof(CuPointer));
+    if(pCurrencies == NULL){
+        perror("falha ao alocar memoria para \"pCurrencies\"");
+        return 2;
+    }
+    for (int i = 0; i < dataQuantity.Clients; i++){
+        pCurrencies[i] = (CuPointer)calloc(dataQuantity.Coins, sizeof(Currency));
+        if(pCurrencies[i] == NULL){
+            perror("falha ao alocar memoria para \"pCurrencies[i]\"");
+            return 2;
+        }
+    }
+    if(pCurrencies == NULL){
+        perror("falha ao alocar memoria para \"pCurrencies\"");
+        return 2;
+    }
+    dBCurrencies = fopen(currencies, "rb");
+    if(dBCurrencies == NULL){
+        perror("falha ao abrir \"currencies.bin\"");
+        return 1;
+    }
+    for (int i = 0; i < dataQuantity.Clients; i++){
+        fread(pCurrencies[i], sizeof(Currency), dataQuantity.Coins, dBCurrencies);
+    }
+    fclose(dBCurrencies);
+
+
+
+    /*Declarações de dados*/
+    //------------------------------------------------------------------------//
+    /*dataQuantity.Coins = 0;
+    dataQuantity.Clients = 0;
+
+    AddClient(pCoins, &pClients,&dataQuantity,true,"Josias","00000000011","000001");
+    AddClient(pCoins, &pClients,&dataQuantity,false,"Elvis","00000000022","000002");
+    AddClient(pCoins, &pClients,&dataQuantity,false,"Edmilson","00000000033","000003");
+    AddClient(pCoins, &pClients,&dataQuantity,false,"Valmira","00000000044","000004");
+    AddClient(pCoins, &pClients,&dataQuantity,false,"Olga","00000000055","000005");
+    AddClient(pCoins, &pClients,&dataQuantity,false,"Cleide","00000000066","000006");
+    AddClient(pCoins, &pClients,&dataQuantity,false,"Dalva","00000000077","000007");
+    AddClient(pCoins, &pClients,&dataQuantity,false,"Carlinhos","00000000088","000008");
+    AddClient(pCoins, &pClients,&dataQuantity,false,"Kleber","00000000099","000009");
+    AddClient(pCoins, &pClients,&dataQuantity,false,"X AE A-Xii","00000000100","000010");
+    
+    AddCoin(&pClients,&pCoins,&dataQuantity,"Real",1,0,0);
+    AddCoin(&pClients,&pCoins,&dataQuantity,"Bitcoin",0.001,0.03,0.02);
+    AddCoin(&pClients,&pCoins,&dataQuantity,"Ethereum",10,0.02,0.01);
+    AddCoin(&pClients,&pCoins,&dataQuantity,"Ripple",50,0.01,0.01);
+    AddCoin(&pClients,&pCoins,&dataQuantity,"Catnip",100,0.05,0.03);
+    AddCoin(&pClients,&pCoins,&dataQuantity,"BFDSCOIN",101,0.04,0.02);
+
+    SaveClient(pClients,dataQuantity.Clients,clients);
+    SaveCurrencies(pClients, pCurrencies,dataQuantity,currencies);
+    SaveCoin(pCoins,dataQuantity.Coins,coins);
+    SaveDataQuantity(dataQuantity,dataQuantities);*/
+    //------------------------------------------------------------------------//
+
+
+
     pClients = (ClPointer)calloc(dataQuantity.Clients, sizeof(Client));
     if(pClients == NULL){
         perror("falha ao alocar memoria para \"pClients\"");
@@ -176,7 +231,7 @@ int main(){
             perror("falha ao alocar memoria para \"pClients[i].Currencies\"");
             return 2;
         }
-    }  
+    }
     dBClients = fopen(clients, "rb");
     if(dBClients == NULL){
         perror("falha ao abrir \"Clients.bin\"");
@@ -184,9 +239,20 @@ int main(){
     } 
     fread(pClients, sizeof(pClients[0]), dataQuantity.Clients, dBClients);
     fclose(dBClients);
+    for (int i = 0; i < dataQuantity.Clients; i++){
+        for(int j = 0; j < dataQuantity.Coins; j++){
+            pClients[i].Currencies[j] = pCurrencies[i][j];
+        }
+    }
     //------------------------------------------------------------------------//
     
-    
+    printf("AMOSTRAR CLRIENTES:\n\n");
+    getchar();
+    getchar();
+    debugClient(pClients,dataQuantity, -1);
+    printf("AMOSTRAR COINS:\n\n");
+    getchar();
+    getchar();
     
     /*Principal do usuario*/
     //------------------------------------------------------------------------//
@@ -229,6 +295,33 @@ int main(){
 
 /*Print/DebugFunctions*/
 //------------------------------------------------------------------------//
+void debugCoin(CoPointer pCoins, DataQuantity dataQuantity, int index){
+
+    if(index == -1){ //Todos as Coins
+        for(index = 0; index < dataQuantity.Coins; index++){
+
+        printf("===============================\n");
+        printf("Nome: %s\n", pCoins[index].Name);
+        printf("Valor: %lf\n", pCoins[index].Value);
+        printf("Taxa de Venda: %lf\n", pCoins[index].SellTax);
+        printf("Taxa de Compra: %lf\n", pCoins[index].BuyTax);
+        printf("===============================\n");
+        }
+    }
+    else if(index > -1 && index < dataQuantity.Coins){ // Coin de Index Específico
+
+        printf("===============================\n");
+        printf("Nome: %s\n", pCoins[index].Name);
+        printf("Valor: %lf\n", pCoins[index].Value);
+        printf("Taxa de Venda: %lf\n", pCoins[index].SellTax);
+        printf("Taxa de Compra: %lf\n", pCoins[index].BuyTax);
+        printf("===============================\n");
+    }
+    else{
+        printf("Index inválido na função \"debugCoin\".\n");
+    }
+}
+
 void printExtrato(ClPointer pClients, DataQuantity dataQuantities, int index){
 
     if(index >= dataQuantities.Clients || index < 0){
@@ -331,6 +424,35 @@ void SaveCoin(CoPointer pCoins, int coinsQuantity, const char *coins){
     }
 }
 
+void SaveCurrencies(ClPointer pClients, CuPointer *pCurrencies, DataQuantity dataQuantity, const char *currencies){
+    FILE* destino;
+    destino = fopen(currencies, "wb");
+    pCurrencies = (CuPointer *)realloc(pCurrencies, dataQuantity.Clients * sizeof(CuPointer));
+    if(pCurrencies == NULL){
+        perror("falha ao alocar memoria para \"pCurrencies\" em \"SaveCurrencies\"");
+    }
+    for (int i = 0; i < dataQuantity.Clients; i++){
+        pCurrencies[i] = (CuPointer)realloc(pCurrencies[i], dataQuantity.Coins * sizeof(Currency));
+        if(pCurrencies[i] == NULL){
+            perror("falha ao alocar memoria para \"pCurrencies\" em \"SaveCurrencies\"");
+        }
+    }
+    for (int i = 0; i < dataQuantity.Clients; i++){
+        for(int j = 0; j < dataQuantity.Coins; j++){
+            pClients[i].Currencies[j] = pCurrencies[i][j];
+        }
+    }
+    
+    
+    if(destino == NULL){
+        perror("falha ao abrir o arquivo destino no \"SaveCurrencies\"");
+    }
+    else{
+        fwrite(pCurrencies, sizeof(Coin), dataQuantity.Coins, destino);
+        fclose(destino);
+    }
+}
+
 void SaveClient(ClPointer pClients, int clientsQuantity, const char *clients){
     FILE* destino;
     destino = fopen(clients, "wb");
@@ -370,12 +492,9 @@ void AddCoin(ClPointer *pClients, CoPointer *pCoins, DataQuantity *dataQuantity,
 }
 
 void AddClient(CoPointer pCoins, ClPointer *pClients, DataQuantity *dataQuantity, bool isAdm, char *name, char *cpf, char *pass){
-    if((*pClients) == NULL){
-        (*pClients) = (ClPointer)calloc(1, sizeof(Client));
-    }
     dataQuantity[0].Clients++;
-    (*pClients) = (ClPointer)realloc((*pClients), sizeof((*pClients)[0]) * dataQuantity[0].Clients);
-    memset(&(*pClients)[dataQuantity[0].Clients-1], 0, sizeof((*pClients)[0]));
+    (*pClients) = (ClPointer)realloc((*pClients), sizeof(Client) * dataQuantity[0].Clients);
+    memset(&(*pClients)[dataQuantity[0].Clients-1], 0, sizeof(Client));
     (*pClients)[dataQuantity[0].Clients-1].IsAdm = isAdm;
     strcpy((*pClients)[dataQuantity[0].Clients-1].Name, name);
     strcpy((*pClients)[dataQuantity[0].Clients-1].Cpf, cpf);
