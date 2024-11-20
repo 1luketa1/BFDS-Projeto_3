@@ -93,6 +93,8 @@ int PedirSenha(char userSenhaCerta[7]);
 void ConsultarExtratoInvestidor(ClPointer pClients, DataQuantity dataQuantities);
 void ConsultarSaldoInvestidor(ClPointer pClients, DataQuantity dataQuantities);
 int isdigit( int arg );
+void ConsultarExtratoInvestidor(ClPointer pClients, DataQuantity dataQuantities);
+void ConsultarSaldoInvestidor(ClPointer pClients, DataQuantity dataQuantities);
 //------------------------------------------------------------------------//
 
 
@@ -257,8 +259,7 @@ int main(){
     /*Principal do usuario*/
     //------------------------------------------------------------------------//
     char respostaUserPP;
-    int *indexClient;
-
+    int indexClient;
     while(true){
 
         limparTerminal();
@@ -270,13 +271,222 @@ int main(){
         //Cadastro
         if(respostaUserPP == '1'){
             limparTerminal();
-            printf(":)");
+                bool IsAdm, tudoCerto;
+                char name[20], cpf[12], pass[7], respostaadm;
+
+                while (true) {
+                    printf("Seu nome: ");
+                    scanf(" %19s", name); 
+
+                    printf("Seu CPF: ");
+                    scanf(" %11s", cpf);
+
+                    tudoCerto = true;
+                    for (int i = 0; cpf[i] != '\0'; i++) {
+                        if (!isdigit(cpf[i])) {
+                            printf("O CPF é composto somente de números!\n");
+                            tudoCerto = false;
+                            Passar();
+                            break;
+                        }
+                    }
+
+                    if (tudoCerto) {
+                        printf("Sua senha (6 dígitos): ");
+                        scanf(" %6s", pass);
+
+                        tudoCerto = true;
+                        for (int i = 0; pass[i] != '\0'; i++) {
+                            if (!isdigit(pass[i])) {
+                                printf("A senha é composta somente de números!\n");
+                                tudoCerto = false;
+                                Passar();
+                                break;
+                            }
+                        }
+
+                        if (tudoCerto) {
+                            printf("Você é ADM (S/n)? ");
+                            scanf(" %c", &respostaadm); 
+
+                            if (respostaadm == 's' || respostaadm == 'S') {
+                                IsAdm = true;
+                            } else {
+                                IsAdm = false;
+                            }
+
+                            break;
+                        }
+                    }
+                }
+
+                AddClient(pCoins, &pClients, &dataQuantity, IsAdm, name, cpf, pass);
+                SaveClient(pClients, dataQuantity.Clients, clients);
         }
         //Login
         else if(respostaUserPP == '2'){
             limparTerminal();
-                //CHAMADA TEMPORARIA DE LOGIN, NECESSARIO CRIAR O DATAQUANTITY
-            Login(pClients, 10, indexClient);
+            Login(pClients, dataQuantity.Clients, &indexClient);
+
+            if(pClients[indexClient].IsAdm){
+                MenuAdm(pClients, indexClient);
+                scanf(" %c", &respostaUserPP);
+
+                if(respostaUserPP == '1'){
+                    bool IsAdm, tudoCerto;
+                char name[20], cpf[12], pass[7], respostaadm;
+
+                while (true) {
+                    printf("Nome do investidor: ");
+                    scanf(" %19s", name); 
+
+                    printf("CPF do investidor: ");
+                    scanf(" %11s", cpf);
+
+                    tudoCerto = true;
+                    for (int i = 0; cpf[i] != '\0'; i++) {
+                        if (!isdigit(cpf[i])) {
+                            printf("O CPF é composto somente de números!\n");
+                            tudoCerto = false;
+                            Passar();
+                            break;
+                        }
+                    }
+
+                    if (tudoCerto) {
+                        printf("Senha do investidor (6 dígitos): ");
+                        scanf(" %6s", pass);
+
+                        tudoCerto = true;
+                        for (int i = 0; pass[i] != '\0'; i++) {
+                            if (!isdigit(pass[i])) {
+                                printf("A senha é composta somente de números!\n");
+                                tudoCerto = false;
+                                Passar();
+                                break;
+                            }
+                        }
+
+                        if (tudoCerto) {
+                            printf("ADM (S/n)? ");
+                            scanf(" %c", &respostaadm); 
+
+                            if (respostaadm == 's' || respostaadm == 'S') {
+                                IsAdm = true;
+                            } else {
+                                IsAdm = false;
+                            }
+
+                            break;
+                        }
+                    }
+                }
+
+                AddClient(pCoins, &pClients, &dataQuantity, IsAdm, name, cpf, pass);
+                SaveClient(pClients, dataQuantity.Clients, clients);
+
+                }
+
+                if(respostaUserPP == '2'){
+                    char cpfremove[12], confirma;
+                    bool userAchado;
+
+                    for ( int indexPlayerLoop = 0; indexPlayerLoop < dataQuantity.Clients; indexPlayerLoop++) {
+                        //Verifica se o CPF e senha são os mesmos para aquele index
+                        if (strcmp(pClients[indexPlayerLoop].Cpf, cpfremove) == 0) {
+                            //caso a condição seja verdadeira, ele faz userAchado = false
+                            userAchado = true;
+                            break;
+                        }
+                    }
+                    if(userAchado){
+                        printf("Quer mesmo excluir(s/n)?\n");
+                        scanf("%c", confirma);
+                        if(confirma == 's' || confirma == 'S'){
+                            RemoveClient(pClients, indexClient, dataQuantities);
+                        }
+                        else if(confirma == 'n' || confirma == 'N'){
+                            printf("Você negou a confirmação!\n");
+                            Passar();
+                        }
+                        else{
+                            printf("Entrada inválida, operação cancelada. \n");
+                            Passar();
+                        }
+                    }
+                    else{
+                        printf("User não encontrado!\n");
+                        Passar();
+                    }
+                            
+                }
+                if(respostaUserPP == '3'){
+                    char nome[20];
+                    int valor, selltax,buytax;
+
+                    printf("Nome da moeda: ");
+                    scanf(" %s", nome);
+                    printf("Valor: ");
+                    scanf(" %lf", valor);
+                    printf("Selltax: ");
+                    scanf(" %lf", selltax);
+                    printf("buytax: ");
+                    scanf(" %lf", buytax);
+
+
+                    AddCoin(&pClients, &pCoins,&dataQuantities,nome,valor,selltax,buytax);
+
+                }
+                if(respostaUserPP == '4'){
+
+
+
+
+
+
+
+                }
+                if(respostaUserPP == '5'){
+                    ConsultarSaldoInvestidor(pClients, dataQuantity);
+
+                }
+
+
+                if(respostaUserPP == '6'){
+                    ConsultarExtratoInvestidor(pClients, dataQuantity);
+                }
+
+                if(respostaUserPP == '7'){
+                    //AtualizarCotacoes(pCriptos, );
+                }
+                if(respostaUserPP == '8'){
+                    break;
+                }
+                else{
+                    printf("Valor inválido!\n");
+                    Passar();
+                }
+
+            }
+            else{
+                MenuInvestidor(pClients, indexClient);
+                scanf(" %c", &respostaUserPP);
+
+                if(respostaUserPP == '1') ConsultarSaldo(pClients, indexClient, dataQuantity);
+                else if(respostaUserPP == '2') printExtrato(pClients, dataQuantity, indexClient);
+                else if(respostaUserPP == '3') DepositarReais(&pClients, indexClient, pCripto);
+                else if(respostaUserPP == '4') SacarReais(&pClients, indexClient, pCriptos);
+                else if(respostaUserPP == '5') ComprarCriptomoedas(&pClients, indexClient, pCriptos, dataQuantity);
+                else if(respostaUserPP == '6') VenderCriptomoedas(&pClients, indexClient, pCriptos, dataQuantity);
+                else if(respostaUserPP == '7') AtualizarCotacoes(pCriptos, dataQuantity.Coins);
+                else if(respostaUserPP == '8') {
+                    break;
+                }
+
+
+
+            }
+
         }
         //Caso não seja 1 ou 2
         else{
@@ -284,10 +494,10 @@ int main(){
             printf("Input inválido, tente novamente...");
             Passar();
         }
+    }
     //------------------------------------------------------------------------//
     free(pCoins);
     FreePClients(pClients, dataQuantity);
-    }
 }
 //------------------------------------------------------------------------//
 
