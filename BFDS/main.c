@@ -68,7 +68,7 @@ void debugCoin(CoPointer pCoins, DataQuantity dataQuantity, int index);
 void debugClient(ClPointer ClPointer, DataQuantity dataQuantity, int index);
 void SaveDataQuantity(DataQuantity dataQuantity, const char *dataQuantities);
 void SaveCoin(CoPointer pCoins, int coinsQuantity, const char *coins);
-void SaveCurrencies(ClPointer pClients, CuPointer *pCurrencies, DataQuantity dataQuantity, const char *currencies);
+void SaveCurrencies(ClPointer pClients, DataQuantity dataQuantity);
 void SaveClient(ClPointer pClients, int clientsQuantity, const char *clients);
 void FreePClients(ClPointer pClients, DataQuantity dataQuantity);
 void AddCoin(ClPointer *pClients, CoPointer *pCoins, DataQuantity *dataQuantity, char *name, double value, double sellTax, double buyTax);
@@ -111,7 +111,7 @@ int main(){
     srand(time(NULL));
 
     FILE *dBDataQuantities, *dBCoins, *dBClients, *dBCurrencies;
-    const char *dataQuantities = "DataQuantity.txt", *coins = "Coin.bin", *clients = "Clients.bin", *currencies = "currencies.bin";
+    const char *dataQuantities = "DataQuantity.txt", *coins = "Coin.bin", *clients = "Clients.bin";
 
 
     DataQuantity dataQuantity;
@@ -121,8 +121,6 @@ int main(){
     dataQuantity.Clients = 0;
 
     CoPointer pCoins = NULL;
-
-    CuPointer *pCurrencies = NULL;
     
     ClPointer pClients = NULL;
 
@@ -137,7 +135,7 @@ int main(){
 
     /*Atribuções das variavies*/
     //------------------------------------------------------------------------//
-    /*dBDataQuantities = fopen(dataQuantities, "r");
+    dBDataQuantities = fopen(dataQuantities, "r");
     if(dBDataQuantities == NULL){
         perror("falha ao abrir \"DataQuantity.txt\"");
         return 1;
@@ -162,35 +160,13 @@ int main(){
         return 1;
     } 
     fread(pCoins, sizeof(Coin), dataQuantity.Coins, dBCoins);
-    fclose(dBCoins);*/
-
-    pCurrencies = (CuPointer*)calloc(dataQuantity.Clients, sizeof(CuPointer));
-    if(pCurrencies == NULL){
-        perror("falha ao alocar memoria para \"pCurrencies\"");
-        return 2;
-    }
-    for (int i = 0; i < dataQuantity.Clients; i++){
-        pCurrencies[i] = (CuPointer)calloc(dataQuantity.Coins, sizeof(Currency));
-        if(pCurrencies[i] == NULL){
-            perror("falha ao alocar memoria para \"pCurrencies[i]\"");
-            return 2;
-        }
-    }
-    /*dBCurrencies = fopen(currencies, "rb");
-    if(dBCurrencies == NULL){
-        perror("falha ao abrir \"currencies.bin\"");
-        return 1;
-    }
-    for (int i = 0; i < dataQuantity.Clients; i++){
-        fread(pCurrencies[i], sizeof(Currency), dataQuantity.Coins, dBCurrencies);
-    }
-    fclose(dBCurrencies);*/
+    fclose(dBCoins);
 
 
 
     /*Declarações de dados*/
     //------------------------------------------------------------------------//
-    dataQuantity.Coins = 0;
+    /*dataQuantity.Coins = 0;
     dataQuantity.Clients = 0;
 
     AddClient(pCoins, &pClients,&dataQuantity,true,"Josias","00000000011","000001");
@@ -212,14 +188,14 @@ int main(){
     AddCoin(&pClients,&pCoins,&dataQuantity,"BFDSCOIN",101,0.04,0.02);
 
     SaveClient(pClients,dataQuantity.Clients,clients);
-    SaveCurrencies(pClients, pCurrencies,dataQuantity,currencies);
+    SaveCurrencies(pClients, dataQuantity);
     SaveCoin(pCoins,dataQuantity.Coins,coins);
-    SaveDataQuantity(dataQuantity,dataQuantities);
+    SaveDataQuantity(dataQuantity,dataQuantities);*/
     //------------------------------------------------------------------------//
 
 
 
-    /*pClients = (ClPointer)calloc(dataQuantity.Clients, sizeof(Client));
+    pClients = (ClPointer)calloc(dataQuantity.Clients, sizeof(Client));
     if(pClients == NULL){
         perror("falha ao alocar memoria para \"pClients\"");
         return 2;
@@ -235,24 +211,22 @@ int main(){
     if(dBClients == NULL){
         perror("falha ao abrir \"Clients.bin\"");
         return 1;
-    } 
+    }
     fread(pClients, sizeof(pClients[0]), dataQuantity.Clients, dBClients);
     fclose(dBClients);
     for (int i = 0; i < dataQuantity.Clients; i++){
-        for(int j = 0; j < dataQuantity.Coins; j++){
-            pClients[i].Currencies[j] = pCurrencies[i][j];
-        }
-    }*/
+        dBCurrencies = fopen(pClients[i].Name, "rb");
+        if(dBCurrencies == NULL){
+            perror("falha ao abrir \"dBCurrencies.bin\"");
+            return 1;
+        } 
+        fread(pClients[i].Currencies, sizeof(Coin), dataQuantity.Coins, dBCurrencies);
+        fclose(dBCurrencies);
+    }
     //------------------------------------------------------------------------//
     
-    printf("AMOSTRAR CLRIENTES:\n\n");
-    getchar();
-    getchar();
-    debugClient(pClients,dataQuantity, -1);
-    printf("AMOSTRAR COINS:\n\n");
-    getchar();
-    getchar();
-    
+
+
     /*Principal do usuario*/
     //------------------------------------------------------------------------//
     char respostaUserPP;
@@ -647,32 +621,17 @@ void SaveCoin(CoPointer pCoins, int coinsQuantity, const char *coins){
     }
 }
 
-void SaveCurrencies(ClPointer pClients, CuPointer *pCurrencies, DataQuantity dataQuantity, const char *currencies){
+void SaveCurrencies(ClPointer pClients, DataQuantity dataQuantity){
     FILE* destino;
-    destino = fopen(currencies, "wb");
-    pCurrencies = (CuPointer *)realloc(pCurrencies, dataQuantity.Clients * sizeof(CuPointer));
-    if(pCurrencies == NULL){
-        perror("falha ao alocar memoria para \"pCurrencies\" em \"SaveCurrencies\"");
-    }
-    for (int i = 0; i < dataQuantity.Clients; i++){
-        pCurrencies[i] = (CuPointer)realloc(pCurrencies[i], dataQuantity.Coins * sizeof(Currency));
-        if(pCurrencies[i] == NULL){
-            perror("falha ao alocar memoria para \"pCurrencies\" em \"SaveCurrencies\"");
+    for(int i = 0; i < dataQuantity.Clients; i++){
+        destino = fopen(pClients[i].Name, "wb");
+        if(destino == NULL){
+            perror("falha ao abrir o arquivo destino no \"SaveCurrencies\"");
         }
-    }
-    for (int i = 0; i < dataQuantity.Clients; i++){
-        for(int j = 0; j < dataQuantity.Coins; j++){
-            pCurrencies[i][j] = pClients[i].Currencies[j];
+        else{
+            fwrite(pClients[i].Currencies, sizeof(Coin), dataQuantity.Coins, destino);
+            fclose(destino);
         }
-    }
-    
-    
-    if(destino == NULL){
-        perror("falha ao abrir o arquivo destino no \"SaveCurrencies\"");
-    }
-    else{
-        fwrite(pCurrencies, sizeof(Coin), dataQuantity.Coins, destino);
-        fclose(destino);
     }
 }
 
