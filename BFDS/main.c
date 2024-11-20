@@ -390,8 +390,9 @@ int main(){
                 if(respostaUserPP == '2'){
                     char cpfremove[12], confirma;
                     bool userAchado;
+                    int indexPlayerLoop;
 
-                    for ( int indexPlayerLoop = 0; indexPlayerLoop < dataQuantity.Clients; indexPlayerLoop++) {
+                    for ( indexPlayerLoop = 0; indexPlayerLoop < dataQuantity.Clients; indexPlayerLoop++) {
                         //Verifica se o CPF e senha são os mesmos para aquele index
                         if (strcmp(pClients[indexPlayerLoop].Cpf, cpfremove) == 0) {
                             //caso a condição seja verdadeira, ele faz userAchado = false
@@ -403,7 +404,7 @@ int main(){
                         printf("Quer mesmo excluir(s/n)?\n");
                         scanf("%c", confirma);
                         if(confirma == 's' || confirma == 'S'){
-                            RemoveClient(pClients, indexClient, dataQuantities);
+                            RemoveClient(pClients, indexPlayerLoop, dataQuantities);
                         }
                         else if(confirma == 'n' || confirma == 'N'){
                             printf("Você negou a confirmação!\n");
