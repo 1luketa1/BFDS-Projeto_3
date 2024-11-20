@@ -1212,4 +1212,46 @@ int PedirSenha(char userSenhaCerta[7]){
     }
 }
 
+void ConsultarExtratoInvestidor(ClPointer pClients, DataQuantity dataQuantities) {
+    char cpfInvestidor[12];
+    bool clienteEncontrado = false;
+
+    printf("Digite o CPF do investidor (somente números): ");
+    scanf("%11s", cpfInvestidor);
+
+    for (int i = 0; i < dataQuantities.Clients; i++) {
+        if (strcmp(pClients[i].Cpf, cpfInvestidor) == 0) {
+            clienteEncontrado = true;
+            printf("\n=== Extrato do Investidor ===\n");
+            printExtrato(pClients, dataQuantities, i);
+            break;
+        }
+    }
+
+    if (!clienteEncontrado) {
+        printf("\nInvestidor não encontrado.\n");
+    }
+}
+
+void ConsultarSaldoInvestidor(ClPointer pClients, DataQuantity dataQuantities) {
+    char cpfInvestidor[12];
+    bool clienteEncontrado = false;
+
+    printf("Digite o CPF do investidor (somente números): ");
+    scanf("%11s", cpfInvestidor);
+
+    for (int i = 0; i < dataQuantities.Clients; i++) {
+        if (strcmp(pClients[i].Cpf, cpfInvestidor) == 0) {
+            clienteEncontrado = true;
+            printf("\n=== Extrato do Investidor ===\n");
+            ConsultarSaldo(pClients, i, dataQuantities);
+            break;
+        }
+    }
+
+    if (!clienteEncontrado) {
+        printf("\nInvestidor não encontrado.\n");
+    }
+}
+
 //------------------------------------------------------------------------//
